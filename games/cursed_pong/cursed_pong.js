@@ -74,7 +74,8 @@ function preload() {
 }
 
 function setup() {
-    createCanvas(width, height);
+    var canvas = createCanvas(width, height);
+    canvas.parent("sketch-holder");
 }
 
 
