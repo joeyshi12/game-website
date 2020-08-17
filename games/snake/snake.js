@@ -146,9 +146,9 @@ class GameRun {
 
         if (this.isGameOver) {
             fill(0);
-            textSize(32);
+            textSize(30);
             text('yuo died', 64, 80);
-            text('score: ' + (this.snake.size - 3), 64, 112);
+            text('score: ' + (this.snake.size - 3), 64, 120);
         }
     }
 }
