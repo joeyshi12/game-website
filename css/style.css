@@ -14,8 +14,8 @@
 }
 
 header {
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding-top: 30px;
+    padding-bottom: 30px;
     padding-left: 30px;
     background-color: #1E2832;
 }
@@ -24,10 +24,19 @@ header a {
     text-decoration: none;
 }
 
-.logo {
-    color: white;
+header img {
+    float: left;
+    height: 60px;
 }
 
+.center {
+    margin: auto;
+    padding-bottom: 20px;
+}
+
+.title {
+    color: white;
+}
 
 .gallery {
     display: flex;
