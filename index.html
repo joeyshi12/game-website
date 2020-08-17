@@ -3,35 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <title>Cool Games</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/style.css">
     <link rel="icon" href="images/favicon.png">
 </head>
 <body>
-    <div class="row">
-        <a href="pong.html">
-            <div class="box">
-                <img src="images/pong.png" alt="Pong">
-                <div class="text">
-                    <h1>Pong</h1>
+    <div id="page-container">
+        <div id="content-wrap">
+            <header>
+                <a href="index.html">
+                    <h1 class="logo"> Cool Games </h1>
+                </a>
+            </header>
+
+            <section id="content">
+                <div class="gallery">
+                    <div class="card">
+                        <a href="pong.html"><img src="images/pong.png" alt="Pong"></a>
+                        <div class="container">
+                            <h4><b>Pong</b></h4><br>
+                            <p>A classic game of 2D ping pong</p><br>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <a href="snake.html"><img src="images/snake.png" alt="Snake"></a>
+                        <div class="container">
+                            <h4><b>Pong</b></h4><br>
+                            <p>The classic arcade Snake game</p><br>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </a>
-        <a href="snake.html">
-            <div class="box">
-                <img src="images/snake.png" alt="Snake">
-                <div class="text">
-                    <h1>Snake</h1>
-                </div>
-            </div>
-        </a>
-        <a href="pathfinder.html">
-            <div class="box">
-                <img src="images/pong.png" alt="Path Finder">
-                <div class="text">
-                    <h1>Path Finder</h1>
-                </div>
-            </div>
-        </a>
+            </section>
+        </div>
+
+        <footer id="footer">
+            <small>&copy; Copyright 2020, Joey Shi</small>
+        </footer>
     </div>
 </body>
 </html>

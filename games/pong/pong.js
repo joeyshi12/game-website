@@ -182,17 +182,17 @@ class GameRun {
     }
 
     keyPressed() {
-        if (keyCode === 87) {
+        if (keyCode === 87 || keyCode === 38) {
             this.player.moveUp = true;
-        } else if (keyCode === 83) {
+        } else if (keyCode === 83 || keyCode === 40) {
             this.player.moveDown = true;
         }
     }
 
     keyReleased() {
-        if (keyCode === 87) {
+        if (keyCode === 87 || keyCode === 38) {
             this.player.moveUp = false;
-        } else if (keyCode === 83) {
+        } else if (keyCode === 83 || keyCode === 40) {
             this.player.moveDown = false;
         }
     }
@@ -219,15 +219,16 @@ function preload() {
 }
 
 function setup() {
-    createCanvas(width, height);
+    var canvas = createCanvas(width, height);
+    canvas.parent("sketch-holder");
 }
 
 function keyPressed() {
-    gameRun.keyPressed(keyCode);
+    gameRun.keyPressed();
 }
 
 function keyReleased() {
-    gameRun.keyReleased(keyCode);
+    gameRun.keyReleased();
 }
 
 function draw() {

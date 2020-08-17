@@ -115,19 +115,19 @@ class GameRun {
         const dx = this.snake.xpos[0] - this.snake.xpos[1];
         const dy = this.snake.ypos[0] - this.snake.ypos[1];
 
-        if (keyCode === 87 && dy <= 0) {
+        if ((keyCode === 87 || keyCode === 38) && dy <= 0) {
             this.snake.direction = "U";
         }
 
-        if (keyCode === 83 && dy >= 0) {
+        if ((keyCode === 83 || keyCode === 40) && dy >= 0) {
             this.snake.direction = "D";
         }
 
-        if (keyCode === 65 && dx <= 0) {
+        if ((keyCode === 65 || keyCode === 37) && dx <= 0) {
             this.snake.direction = "L";
         }
 
-        if (keyCode === 68 && dx >= 0) {
+        if ((keyCode === 68 || keyCode === 39) && dx >= 0) {
             this.snake.direction = "R";
         }
     }
@@ -160,7 +160,8 @@ function preload() {
 }
 
 function setup() {
-    createCanvas(n * unitLength, n * unitLength);
+    var canvas = createCanvas(n * unitLength, n * unitLength);
+    canvas.parent("sketch-holder");
 }
 
 function keyPressed() {
