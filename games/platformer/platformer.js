@@ -13,12 +13,14 @@ function setup() {
 function keyPressed() {
     if (keyCode === 87 && player.grounded) {
         player.y -= 1;
-        player.vy = -8;
+        player.vy = -9;
         player.grounded = false;
     } else if (keyCode === 65) {
         player.direction = -1;
+        player.facingRight = false;
     } else if (keyCode === 68) {
         player.direction = 1;
+        player.facingRight = true;
     }
 }
 

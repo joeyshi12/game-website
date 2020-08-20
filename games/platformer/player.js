@@ -13,6 +13,7 @@ class Player {
         this.animIdx = 0;
         this.animTimer = this.ANIMATION_BUFFER;
         this.grounded = false;
+        this.facingRight = true;
     }
 
     checkGround() {
@@ -73,7 +74,16 @@ class Player {
     }
 
     draw() {
-        image(spriteSheet, player.x, player.y, unitLength, unitLength, (18 + this.animIdx) * 16, 7 * 16 + 0.5, 16, 16);
+        // noFill();
+        // stroke(0, 255, 0);
+        // rect(player.x, player.y + 5, unitLength, unitLength - 5);
+
+        if (this.facingRight) {
+            image(spriteSheet, player.x, player.y, unitLength, unitLength, (18 + this.animIdx) * 16, 7 * 16 + 0.5, 16, 16);
+        } else {
+            scale(-1, 1);
+            image(spriteSheet, 728 - (player.x + spriteSheet.width), player.y, unitLength, unitLength, (18 + this.animIdx) * 16, 7 * 16 + 1, 16, 15);
+        }
     }
 }
 
