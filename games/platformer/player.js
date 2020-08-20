@@ -19,10 +19,10 @@ class Player {
         let groundCheck = false;
 
         let i = Math.floor((player.y + unitLength) / unitLength) + 1;
-        let j = Math.floor((player.x + 8) / unitLength);
+        let j = Math.floor((player.x + 9) / unitLength);
         groundCheck = groundCheck || solidTiles.has(tilemap.cells[i * tilemap.n + j]);
 
-        j = Math.floor((player.x + unitLength - 8) / unitLength);
+        j = Math.floor((player.x + unitLength - 9) / unitLength);
         groundCheck = groundCheck || solidTiles.has(tilemap.cells[i * tilemap.n + j]);
 
         if (groundCheck) {
