@@ -3,6 +3,7 @@ class Player {
     GRAVITY = 0.4;
     MAX_SPEED = 4;
     ANIMATION_BUFFER = 6;
+    ATTACK_COOLDOWN = 10;
 
     constructor(x, y) {
         this.x = x;
@@ -14,6 +15,7 @@ class Player {
         this.animTimer = this.ANIMATION_BUFFER;
         this.grounded = false;
         this.facingRight = true;
+        this.attackCoolDown =  0;
     }
 
     checkGround() {
@@ -79,10 +81,10 @@ class Player {
         // rect(player.x, player.y + 5, unitLength, unitLength - 5);
 
         if (this.facingRight) {
-            image(spriteSheet, player.x, player.y, unitLength, unitLength, (18 + this.animIdx) * 16, 7 * 16 + 0.5, 16, 16);
+            image(spriteSheet, 250, 200, unitLength, unitLength, (18 + this.animIdx) * 16, 7 * 16 + 1, 16, 15);
         } else {
             scale(-1, 1);
-            image(spriteSheet, 728 - (player.x + spriteSheet.width), player.y, unitLength, unitLength, (18 + this.animIdx) * 16, 7 * 16 + 1, 16, 15);
+            image(spriteSheet, 728 - (250 + spriteSheet.width), 200, unitLength, unitLength, (18 + this.animIdx) * 16, 7 * 16 + 1, 16, 15);
         }
     }
 }

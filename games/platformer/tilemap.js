@@ -6,13 +6,15 @@ class Tilemap {
         this.spriteSheet = null;
     }
 
+    update() {}
+
     draw() {
         for (var i = 0; i < this.m * this.n; i++) {
             const x = (i % this.n) * unitLength;
             const y = Math.floor(i / this.n) * unitLength;
             const sx = (this.cells[i] % 48) * 16;
             const sy = Math.floor(this.cells[i] / 48) * 16;
-            image(spriteSheet, x, y, unitLength, unitLength, sx, sy, 16, 16);
+            image(spriteSheet, x - player.x + 250, y - player.y + 200, unitLength, unitLength, sx, sy, 16, 16);
         }
     }
 }
@@ -41,5 +43,15 @@ const cells = [ 0 , I , 0 , 0 , 0 , 0 , 0 , 0 , 0 , I , 0 , 0 , 0 , 0 , 0 ,
                 48, I , a , b , c , 66, 0 , 0 , 0 , 0 , 0 , 67, 0 , 0 , 0 ,
                 19, 19, 19, 19, 19, d , 0 , 67, 0 , 0 , 0 , 0 , 0 , 0 , 0 ,
                 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ];
+const cells2 = [ 0 , I , 0 , 0 , 0 , 0 , 0 , 0 , 0 , I , 0 , 0 , 0 , 0 , 0 ,
+                 0 , I , 0 , 0 , 0 , 0 , 0 , 0 , 0 , I , 0 , 0 , 0 , 0 , 0 ,
+                 0 , I , 0 , 0 , 0 , 0 , 0 , 0 , 0 , I , 0 , 0 , 0 , 0 , 0 ,
+                 0 , I , 0 , 0 , 0 , a , b , c , 0 , I , 0 , 0 , 0 , 0 , 0 ,
+                 0 , I , 0 , 0 , 0 , 0 , 0 , 0 , 0 , I , a , b , c , 0 , 0 ,
+                 0 , I , 0 , 0 , 0 , 0 , 0 , 0 , 0 , I , 0 , 0 , 0 , 50, 49,
+                 0 , I , 0 , 0 , 0 , 18, 19, 19, 19, 19, 19, 19, 19, 19, 19,
+                 48, I , a , b , c , 66, 0 , 0 , 0 , 0 , 0 , 67, 0 , 0 , 0 ,
+                 19, 19, 19, 19, 19, d , 0 , 67, 0 , 0 , 0 , 0 , 0 , 0 , 0 ,
+                 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ];
 
 const tilemap = new Tilemap(cells, 9, 15);

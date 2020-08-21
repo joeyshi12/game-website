@@ -1,13 +1,15 @@
 const unitLength = 40;
 let spriteSheet;
+let hierarchy;
 
 function preload() {
     spriteSheet = loadImage('games/platformer/sprites.png');
 }
 
 function setup() {
-    var canvas = createCanvas(tilemap.n * unitLength, tilemap.m * unitLength);
+    const canvas = createCanvas(tilemap.n * unitLength, tilemap.m * unitLength);
     canvas.parent("sketch-holder");
+    hierarchy = [tilemap, player];
 }
 
 function keyPressed() {
@@ -34,7 +36,11 @@ function keyReleased() {
 
 function draw() {
     background(71, 45, 60);
-    tilemap.draw();
-    player.draw();
-    player.update();
+    for (let i = 0; i < hierarchy.length; i++) {
+        hierarchy[i].draw();
+    }
+
+    for (let i = 0; i < hierarchy.length; i++) {
+        hierarchy[i].update();
+    }
 }
