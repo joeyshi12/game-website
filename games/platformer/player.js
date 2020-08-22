@@ -3,7 +3,6 @@ class Player {
     GRAVITY = 0.4;
     MAX_SPEED = 4;
     ANIMATION_BUFFER = 6;
-    ATTACK_COOLDOWN = 10;
 
     constructor(x, y) {
         this.x = x;
@@ -15,18 +14,25 @@ class Player {
         this.animTimer = this.ANIMATION_BUFFER;
         this.grounded = false;
         this.facingRight = true;
-        this.attackCoolDown =  0;
     }
 
+    /**
+     * If there is a solid / platform tile immediately below player, returns that y position; else return -1
+     * @return {Number}     The y position of the immediate solid / platform tile below; else, -1
+     */
     checkGround() {
         let groundCheck = false;
 
         let i = Math.floor((player.y + unitLength) / unitLength) + 1;
         let j = Math.floor((player.x + 9) / unitLength);
-        groundCheck = groundCheck || solidTiles.has(tilemap.cells[i * tilemap.n + j]);
+        // square(j * unitLength - player.x + center_x, i * unitLength - player.y + center_y, unitLength);
+        // square(732 - (j * unitLength - player.x + center_x + spriteSheet.width), i * unitLength - player.y + center_y, unitLength);
+        groundCheck = groundCheck || solids.has(tilemap.cells[i * tilemap.n + j]) || platforms.has(tilemap.cells[i * tilemap.n + j]);
 
         j = Math.floor((player.x + unitLength - 9) / unitLength);
-        groundCheck = groundCheck || solidTiles.has(tilemap.cells[i * tilemap.n + j]);
+        // square(j * unitLength - player.x + center_x, i * unitLength - player.y + center_y, unitLength);
+        // square(732 - (j * unitLength - player.x + center_x + spriteSheet.width), i * unitLength - player.y + center_y, unitLength);
+        groundCheck = groundCheck || solids.has(tilemap.cells[i * tilemap.n + j]) || platforms.has(tilemap.cells[i * tilemap.n + j]);
 
         if (groundCheck) {
             return i * unitLength;
@@ -35,6 +41,42 @@ class Player {
         return -1;
     }
 
+    /**
+     * If there is a solid tile immediately to the right of player, returns that x position; else return -1
+     * @return {Number}     The y position of the immediate solid tile to the right; else, -1
+     */
+    checkRightWall() {}
+
+    /**
+     * If there is a solid tile immediately to the left of player, returns that x position; else return -1
+     * @return {Number}     The y position of the immediate solid tile to the left; else, -1
+     */
+    checkLeftWall() {
+        // if there is a wall to the left, return the x position of the wall; else -1
+        return -1;
+    }
+
+    /**
+     * If player is on a platform tile, let them pass through the platform by moving them 1 unit down
+     */
+    dropDownPlatform() {
+        let i = Math.floor((player.y + unitLength) / unitLength) + 1;
+        let j = Math.floor((player.x + 9) / unitLength);
+        if (!platforms.has(tilemap.cells[i * tilemap.n + j])) {
+            return;
+        }
+
+        j = Math.floor((player.x + unitLength - 9) / unitLength);
+        if (!platforms.has(tilemap.cells[i * tilemap.n + j])) {
+            return;
+        }
+
+        player.y += 1;
+    }
+
+    /**
+     * updates player animation, velocity, position
+     */
     update() {
         if (this.animTimer > 0) {
             this.animTimer--;
@@ -47,6 +89,8 @@ class Player {
             }
         }
 
+        // const rightWall = this.checkRightWall();
+
         if (this.direction === 0) {
             if ((this.vx - this.ACCELERATION) * this.direction < 0) {
                 this.vx -= this.ACCELERATION;
@@ -54,6 +98,17 @@ class Player {
                 this.vx = 0;
             }
         } else {
+            // if (rightWall > 0 && this.x + this.vx >= rightWall - unitLength - 1) {
+            //     console.log("HIT WALL");
+            //     this.vx = 0;
+            // } else {
+            //     if (Math.abs(this.vx) <= this.MAX_SPEED) {
+            //         this.vx += this.ACCELERATION;
+            //     } else {
+            //         this.vx = this.MAX_SPEED;
+            //     }
+            // }
+
             if (Math.abs(this.vx) <= this.MAX_SPEED) {
                 this.vx += this.ACCELERATION;
             } else {
@@ -75,18 +130,21 @@ class Player {
         }
     }
 
+    /**
+     * Draws player on the canvas
+     */
     draw() {
         // noFill();
         // stroke(0, 255, 0);
-        // rect(player.x, player.y + 5, unitLength, unitLength - 5);
+        // rect(center_x, center_y, unitLength, unitLength);
 
         if (this.facingRight) {
-            image(spriteSheet, 250, 200, unitLength, unitLength, (18 + this.animIdx) * 16, 7 * 16 + 1, 16, 15);
+            image(spriteSheet, center_x, center_y, unitLength, unitLength, (18 + this.animIdx) * 16, 7 * 16 + 1, 16, 15);
         } else {
             scale(-1, 1);
-            image(spriteSheet, 728 - (250 + spriteSheet.width), 200, unitLength, unitLength, (18 + this.animIdx) * 16, 7 * 16 + 1, 16, 15);
+            image(spriteSheet, 732 - (center_x + spriteSheet.width), center_y, unitLength, unitLength, (18 + this.animIdx) * 16, 7 * 16 + 1, 16, 15);
         }
     }
 }
 
-let player = new Player(0, 0);
+let player = new Player(100, 0);
