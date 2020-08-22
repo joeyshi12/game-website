@@ -6,6 +6,8 @@ let hierarchy;
 
 function preload() {
     spriteSheet = loadImage('games/platformer/sprites.png');
+    jumpSound = loadSound('games/platformer/jump.mp3');
+    landSound = loadSound('games/platformer/land.mp3');
 }
 
 function setup() {
@@ -20,6 +22,7 @@ function keyPressed() {
         player.y -= 1;
         player.vy = -9;
         player.grounded = false;
+        jumpSound.play();
     } else if (keyCode === 83) {
         player.dropDownPlatform();
     } else if (keyCode === 65) {

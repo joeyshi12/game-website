@@ -14,6 +14,9 @@ class Player {
         this.animTimer = this.ANIMATION_BUFFER;
         this.grounded = false;
         this.facingRight = true;
+
+        // change later, this is really really bad code
+        this.playOnce = false;
     }
 
     /**
@@ -123,10 +126,15 @@ class Player {
         if (this.grounded) {
             this.vy = 0;
             this.y = ground - unitLength - 1;
+            if (this.playOnce) {
+                landSound.play();
+                this.playOnce = false;
+            }
         } else {
             this.vy += this.GRAVITY;
             this.y += this.vy;
             this.animIdx = 4;
+            player.playOnce = true;
         }
     }
 
