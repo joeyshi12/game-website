@@ -139,10 +139,10 @@ class Player {
         // rect(center_x, center_y, unitLength, unitLength);
 
         if (this.facingRight) {
-            image(spriteSheet, center_x, center_y, unitLength, unitLength, (18 + this.animIdx) * 16, 7 * 16 + 1, 16, 15);
+            image(spriteSheet, camera.x, camera.y, unitLength, unitLength, (18 + this.animIdx) * 16, 7 * 16 + 1, 16, 15);
         } else {
             scale(-1, 1);
-            image(spriteSheet, 732 - (center_x + spriteSheet.width), center_y, unitLength, unitLength, (18 + this.animIdx) * 16, 7 * 16 + 1, 16, 15);
+            image(spriteSheet, 732 - (camera.x + spriteSheet.width), camera.y, unitLength, unitLength, (18 + this.animIdx) * 16, 7 * 16 + 1, 16, 15);
         }
     }
 }

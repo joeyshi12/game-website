@@ -4,9 +4,6 @@ const unitLength = 36;
 let spriteSheet;
 let hierarchy;
 
-const center_x = (width - unitLength) / 2;
-const center_y = height / 2;
-
 function preload() {
     spriteSheet = loadImage('games/platformer/sprites.png');
 }
@@ -53,4 +50,6 @@ function draw() {
     for (let i = 0; i < hierarchy.length; i++) {
         hierarchy[i].update();
     }
+
+    camera.update();
 }

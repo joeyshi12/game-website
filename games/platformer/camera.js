@@ -7,6 +7,16 @@ class Camera {
     }
 
     update() {
-        
+        if (player.x < this.center_x) {
+            this.x = player.x
+        } else if (player.x - 832 > this.center_x) {
+            this.x = player.x - 832;
+        } else {
+            this.x = this.center_x;
+        }
+
+        this.y = Math.min(player.y, this.center_y);
     }
 }
+
+let camera = new Camera((width - unitLength) / 2, height / 2);
