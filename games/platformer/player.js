@@ -14,9 +14,7 @@ class Player {
         this.animTimer = this.ANIMATION_BUFFER;
         this.grounded = false;
         this.facingRight = true;
-
-        // change later, this is really really bad code
-        this.playOnce = false;
+        this.isLanding = false;
     }
 
     /**
@@ -48,7 +46,26 @@ class Player {
      * If there is a solid tile immediately to the right of player, returns that x position; else return -1
      * @return {Number}     The y position of the immediate solid tile to the right; else, -1
      */
-    checkRightWall() {}
+    checkRightWall() {
+        let rightWallCheck = false;
+
+        let i = Math.floor((player.y + unitLength) / unitLength) + 1;
+        let j = Math.floor((player.x + 9) / unitLength);
+        // square(j * unitLength - player.x + center_x, i * unitLength - player.y + center_y, unitLength);
+        // square(732 - (j * unitLength - player.x + center_x + spriteSheet.width), i * unitLength - player.y + center_y, unitLength);
+        rightWallCheck = rightWallCheck || solids.has(tilemap.cells[i * tilemap.n + j]) || platforms.has(tilemap.cells[i * tilemap.n + j]);
+
+        j = Math.floor((player.x + unitLength - 9) / unitLength);
+        // square(j * unitLength - player.x + center_x, i * unitLength - player.y + center_y, unitLength);
+        // square(732 - (j * unitLength - player.x + center_x + spriteSheet.width), i * unitLength - player.y + center_y, unitLength);
+        rightWallCheck = rightWallCheck || solids.has(tilemap.cells[i * tilemap.n + j]) || platforms.has(tilemap.cells[i * tilemap.n + j]);
+
+        if (rightWallCheck) {
+            return i * unitLength;
+        }
+
+        return -1;
+    }
 
     /**
      * If there is a solid tile immediately to the left of player, returns that x position; else return -1
@@ -85,10 +102,10 @@ class Player {
             this.animTimer--;
         } else {
             this.animTimer = this.ANIMATION_BUFFER;
-            if (this.vx ** 2 > 0) {
-                this.animIdx = (this.animIdx + 1) % 4;
-            } else {
+            if (this.direction === 0) {
                 this.animIdx = 0;
+            } else {
+                this.animIdx = (this.animIdx + 1) % 4;
             }
         }
 
@@ -101,17 +118,6 @@ class Player {
                 this.vx = 0;
             }
         } else {
-            // if (rightWall > 0 && this.x + this.vx >= rightWall - unitLength - 1) {
-            //     console.log("HIT WALL");
-            //     this.vx = 0;
-            // } else {
-            //     if (Math.abs(this.vx) <= this.MAX_SPEED) {
-            //         this.vx += this.ACCELERATION;
-            //     } else {
-            //         this.vx = this.MAX_SPEED;
-            //     }
-            // }
-
             if (Math.abs(this.vx) <= this.MAX_SPEED) {
                 this.vx += this.ACCELERATION;
             } else {
@@ -126,15 +132,15 @@ class Player {
         if (this.grounded) {
             this.vy = 0;
             this.y = ground - unitLength - 1;
-            if (this.playOnce) {
+            if (this.isLanding) {
                 landSound.play();
-                this.playOnce = false;
+                this.isLanding = false;
             }
         } else {
             this.vy += this.GRAVITY;
             this.y += this.vy;
             this.animIdx = 4;
-            player.playOnce = true;
+            player.isLanding = true;
         }
     }
 

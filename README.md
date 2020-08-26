@@ -5,6 +5,7 @@ A collection of games that I implemented using p5.js or Unity. The games can be 
 # Selection
 - [x] Pong
 - [x] Snake
-- [x] Cursed Pong
-- [ ] Jump Man
-- [ ] Free Market
+- [x] Cursed Pong (an experiment went wrong)
+- [ ] A Cold Place (side-scrolling platformer)
+- [ ] Free Market (multiplayer platformer-themed chatroom)
+- [ ] Path Finder (game about avoiding collisions from enemies with different path finding ai)

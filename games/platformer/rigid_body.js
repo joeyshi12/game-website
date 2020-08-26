@@ -1,5 +1,5 @@
 class RigidBody {
-    constructor(x, y, width, height, mass=1, restitution=1) {
+    constructor(x, y, width, height, mass = 1, restitution = 1) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -22,20 +22,18 @@ class RigidBody {
         const rvy = rb.vy - this.vy;
         let nx, ny;
 
-        if (this.x + this.width < rb.x) {
-            console.log(0);
+        const dx = rb.x + rb.width / 2 - (this.x + this.width / 2);
+        const dy = rb.y + rb.height / 2 - (this.y + this.height / 2);
+        if (dx > 0 && Math.abs(dy) < this.height && rvx < 0) {
             nx = 1;
             ny = 0;
-        } else if (this.x > rb.x + rb.width) {
-            console.log(1);
+        } else if (dx < 0 && Math.abs(dy) < this.height && rvx > 0) {
             nx = -1;
             ny = 0;
-        } else if (this.y + this.height < rb.y) {
-            console.log(2);
+        } else if (dy < 0 && Math.abs(dx) < this.width && rvy > 0) {
             nx = 0;
             ny = -1;
-        } else if (this.y > rb.y + rb.height) {
-            console.log(3);
+        } else if (dy > 0 && Math.abs(dx) < this.width && rvy < 0) {
             nx = 0;
             ny = 1;
         } else {
@@ -60,8 +58,6 @@ class RigidBody {
         this.vy -= impulse_y / this.mass;
         rb.vx += impulse_x / rb.mass;
         rb.vy += impulse_y / rb.mass;
-
-        console.log(this.vx);
     }
 
     update() {
@@ -70,6 +66,8 @@ class RigidBody {
     }
 
     draw() {
+        noFill();
+        stroke(100, 255, 100);
         rect(this.x, this.y, this.width, this.height);
     }
 }

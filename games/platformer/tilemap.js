@@ -40,7 +40,9 @@ solids.add(18);
 solids.add(19);
 solids.add(20);
 solids.add(66);
-solids.add(28);
+solids.add(68)
+solids.add(e);
+solids.add(d);
 
 const platforms = new Set();
 platforms.add(a);

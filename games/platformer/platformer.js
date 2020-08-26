@@ -3,6 +3,7 @@ const height = 400;
 const unitLength = 36;
 let spriteSheet;
 let hierarchy;
+let jumpSound, landSound;
 
 function preload() {
     spriteSheet = loadImage('games/platformer/sprites.png');
@@ -11,7 +12,6 @@ function preload() {
 }
 
 function setup() {
-    // const canvas = createCanvas(tilemap.n * unitLength, tilemap.m * unitLength);
     const canvas = createCanvas(width, height);
     canvas.parent("sketch-holder");
     hierarchy = [tilemap, player];
