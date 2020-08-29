@@ -1,20 +1,21 @@
 const width = 600;
 const height = 400;
 const unitLength = 36;
-let spriteSheet;
-let hierarchy;
-let jumpSound, landSound;
+let spriteSheet, jumpSound, landSound;
+let camera, tilemap, player;
 
 function preload() {
-    spriteSheet = loadImage('games/platformer/sprites.png');
-    jumpSound = loadSound('games/platformer/jump.mp3');
-    landSound = loadSound('games/platformer/land.mp3');
+    spriteSheet = loadImage('games/platformer/assets/sprites.png');
+    jumpSound = loadSound('games/platformer/assets/jump.mp3');
+    landSound = loadSound('games/platformer/assets/land.mp3');
 }
 
 function setup() {
     const canvas = createCanvas(width, height);
     canvas.parent("sketch-holder");
-    hierarchy = [tilemap, player];
+    camera = new Camera((width - unitLength) / 2, height / 2);
+    tilemap = new Tilemap(cells, m, n);
+    player = new Player(100, 0);
 }
 
 function keyPressed() {
@@ -46,13 +47,9 @@ function keyReleased() {
 
 function draw() {
     background(71, 45, 60);
-    for (let i = 0; i < hierarchy.length; i++) {
-        hierarchy[i].draw();
-    }
+    tilemap.draw();
+    player.draw();
 
-    for (let i = 0; i < hierarchy.length; i++) {
-        hierarchy[i].update();
-    }
-
+    player.update();
     camera.update();
 }

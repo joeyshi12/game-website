@@ -18,5 +18,3 @@ class Camera {
         this.y = Math.min(player.y, this.center_y);
     }
 }
-
-let camera = new Camera((width - unitLength) / 2, height / 2);

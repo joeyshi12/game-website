@@ -9,6 +9,7 @@ class Player {
         this.y = y;
         this.vx = 0;
         this.vy = 0;
+        this.rigidBody = new RigidBody(x, y, 1, 1);
         this.direction = 0;
         this.animIdx = 0;
         this.animTimer = this.ANIMATION_BUFFER;
@@ -25,12 +26,12 @@ class Player {
         let groundCheck = false;
 
         let i = Math.floor((player.y + unitLength) / unitLength) + 1;
-        let j = Math.floor((player.x + 9) / unitLength);
+        let j = Math.floor((player.x + 5) / unitLength);
         // square(j * unitLength - player.x + center_x, i * unitLength - player.y + center_y, unitLength);
         // square(732 - (j * unitLength - player.x + center_x + spriteSheet.width), i * unitLength - player.y + center_y, unitLength);
         groundCheck = groundCheck || solids.has(tilemap.cells[i * tilemap.n + j]) || platforms.has(tilemap.cells[i * tilemap.n + j]);
 
-        j = Math.floor((player.x + unitLength - 9) / unitLength);
+        j = Math.floor((player.x + unitLength - 5) / unitLength);
         // square(j * unitLength - player.x + center_x, i * unitLength - player.y + center_y, unitLength);
         // square(732 - (j * unitLength - player.x + center_x + spriteSheet.width), i * unitLength - player.y + center_y, unitLength);
         groundCheck = groundCheck || solids.has(tilemap.cells[i * tilemap.n + j]) || platforms.has(tilemap.cells[i * tilemap.n + j]);
@@ -50,12 +51,12 @@ class Player {
         let rightWallCheck = false;
 
         let i = Math.floor((player.y + unitLength) / unitLength) + 1;
-        let j = Math.floor((player.x + 9) / unitLength);
+        let j = Math.floor((player.x + 5) / unitLength);
         // square(j * unitLength - player.x + center_x, i * unitLength - player.y + center_y, unitLength);
         // square(732 - (j * unitLength - player.x + center_x + spriteSheet.width), i * unitLength - player.y + center_y, unitLength);
         rightWallCheck = rightWallCheck || solids.has(tilemap.cells[i * tilemap.n + j]) || platforms.has(tilemap.cells[i * tilemap.n + j]);
 
-        j = Math.floor((player.x + unitLength - 9) / unitLength);
+        j = Math.floor((player.x + unitLength - 5) / unitLength);
         // square(j * unitLength - player.x + center_x, i * unitLength - player.y + center_y, unitLength);
         // square(732 - (j * unitLength - player.x + center_x + spriteSheet.width), i * unitLength - player.y + center_y, unitLength);
         rightWallCheck = rightWallCheck || solids.has(tilemap.cells[i * tilemap.n + j]) || platforms.has(tilemap.cells[i * tilemap.n + j]);
@@ -150,15 +151,13 @@ class Player {
     draw() {
         // noFill();
         // stroke(0, 255, 0);
-        // rect(center_x, center_y, unitLength, unitLength);
+        // rect(camera.x + unitLength / 6, camera.y + unitLength / 4, unitLength - unitLength / 3, unitLength - unitLength / 4);
 
         if (this.facingRight) {
             image(spriteSheet, camera.x, camera.y, unitLength, unitLength, (18 + this.animIdx) * 16, 7 * 16 + 1, 16, 15);
         } else {
             scale(-1, 1);
-            image(spriteSheet, 732 - (camera.x + spriteSheet.width), camera.y, unitLength, unitLength, (18 + this.animIdx) * 16, 7 * 16 + 1, 16, 15);
+            image(spriteSheet, (768 - unitLength) - (camera.x + spriteSheet.width), camera.y, unitLength, unitLength, (18 + this.animIdx) * 16, 7 * 16 + 1, 16, 15);
         }
     }
 }
-
-let player = new Player(100, 0);
