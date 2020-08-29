@@ -2,7 +2,8 @@ const width = 600;
 const height = 400;
 const unitLength = 32;
 let spriteSheet, jumpSound, landSound;
-let camera, tilemap, player;
+let camera, tilemap1, tilemap2, player;
+let tilemap;
 
 function preload() {
     spriteSheet = loadImage('games/platformer/assets/sprites.png');
@@ -14,7 +15,9 @@ function setup() {
     const canvas = createCanvas(width, height);
     canvas.parent("sketch-holder");
     camera = new Camera((width - unitLength) / 2, height / 2);
-    tilemap = new Tilemap(cells, m, n);
+    tilemap1 = new Tilemap(cells1, m, n);
+    tilemap2 = new Tilemap(cells2, m, n);
+    tilemap = tilemap1;
     player = new Player(100, 0);
 }
 
@@ -47,6 +50,16 @@ function keyReleased() {
 
 function draw() {
     background(71, 45, 60);
+    if (tilemap === tilemap1 && player.x > tilemap1.n * unitLength - 10) {
+        tilemap = tilemap2;
+        player.x = 0;
+    }
+
+    if (tilemap === tilemap2 && player.x + player.WIDTH - 10 < 0) {
+        tilemap = tilemap1;
+        player.x = tilemap1.n * unitLength - 10;
+    }
+
     tilemap.draw();
     player.draw();
 
