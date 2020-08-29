@@ -1,6 +1,6 @@
 const width = 600;
 const height = 400;
-const unitLength = 36;
+const unitLength = 32;
 let spriteSheet, jumpSound, landSound;
 let camera, tilemap, player;
 

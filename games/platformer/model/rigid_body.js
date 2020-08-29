@@ -68,6 +68,6 @@ class RigidBody {
     draw() {
         noFill();
         stroke(100, 255, 100);
-        rect(this.x, this.y, this.width, this.height);
+        rect(this.x - player.x + camera.x, this.y - player.y + camera.y, this.width, this.height);
     }
 }

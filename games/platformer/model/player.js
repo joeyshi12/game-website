@@ -3,13 +3,15 @@ class Player {
     GRAVITY = 0.4;
     MAX_SPEED = 4;
     ANIMATION_BUFFER = 6;
+    WIDTH = unitLength - 6;
+    HEIGHT = unitLength - 6;
 
     constructor(x, y) {
         this.x = x;
         this.y = y;
         this.vx = 0;
         this.vy = 0;
-        this.rigidBody = new RigidBody(x, y, 1, 1);
+        this.rigidBody = new RigidBody(x, y, this.WIDTH, this.HEIGHT);
         this.direction = 0;
         this.animIdx = 0;
         this.animTimer = this.ANIMATION_BUFFER;
@@ -25,16 +27,14 @@ class Player {
     checkGround() {
         let groundCheck = false;
 
-        let i = Math.floor((player.y + unitLength) / unitLength) + 1;
-        let j = Math.floor((player.x + 5) / unitLength);
-        // square(j * unitLength - player.x + center_x, i * unitLength - player.y + center_y, unitLength);
-        // square(732 - (j * unitLength - player.x + center_x + spriteSheet.width), i * unitLength - player.y + center_y, unitLength);
+        let i = Math.floor((this.y + this.HEIGHT) / unitLength) + 1;
+        let j = Math.floor(this.x / unitLength);
         groundCheck = groundCheck || solids.has(tilemap.cells[i * tilemap.n + j]) || platforms.has(tilemap.cells[i * tilemap.n + j]);
+        // square(j * unitLength - this.x + camera.x, i * unitLength - this.y + camera.y, unitLength);
 
-        j = Math.floor((player.x + unitLength - 5) / unitLength);
-        // square(j * unitLength - player.x + center_x, i * unitLength - player.y + center_y, unitLength);
-        // square(732 - (j * unitLength - player.x + center_x + spriteSheet.width), i * unitLength - player.y + center_y, unitLength);
+        j = Math.floor((this.x + this.WIDTH) / unitLength);
         groundCheck = groundCheck || solids.has(tilemap.cells[i * tilemap.n + j]) || platforms.has(tilemap.cells[i * tilemap.n + j]);
+        // square(j * unitLength - this.x + camera.x, i * unitLength - this.y + camera.y, unitLength);
 
         if (groundCheck) {
             return i * unitLength;
@@ -50,19 +50,17 @@ class Player {
     checkRightWall() {
         let rightWallCheck = false;
 
-        let i = Math.floor((player.y + unitLength) / unitLength) + 1;
-        let j = Math.floor((player.x + 5) / unitLength);
-        // square(j * unitLength - player.x + center_x, i * unitLength - player.y + center_y, unitLength);
-        // square(732 - (j * unitLength - player.x + center_x + spriteSheet.width), i * unitLength - player.y + center_y, unitLength);
-        rightWallCheck = rightWallCheck || solids.has(tilemap.cells[i * tilemap.n + j]) || platforms.has(tilemap.cells[i * tilemap.n + j]);
+        let i = Math.floor((this.y) / unitLength);
+        let j = Math.floor((this.x + this.WIDTH) / unitLength) + 1;
+        rightWallCheck = rightWallCheck || solids.has(tilemap.cells[i * tilemap.n + j]);
+        // square(j * unitLength - this.x + camera.x, i * unitLength - this.y + camera.y, unitLength);
 
-        j = Math.floor((player.x + unitLength - 5) / unitLength);
-        // square(j * unitLength - player.x + center_x, i * unitLength - player.y + center_y, unitLength);
-        // square(732 - (j * unitLength - player.x + center_x + spriteSheet.width), i * unitLength - player.y + center_y, unitLength);
-        rightWallCheck = rightWallCheck || solids.has(tilemap.cells[i * tilemap.n + j]) || platforms.has(tilemap.cells[i * tilemap.n + j]);
+        i = Math.floor((this.y + this.HEIGHT) / unitLength);
+        rightWallCheck = rightWallCheck || solids.has(tilemap.cells[i * tilemap.n + j]);
+        // square(j * unitLength - this.x + camera.x, i * unitLength - this.y + camera.y, unitLength);
 
         if (rightWallCheck) {
-            return i * unitLength;
+            return j * unitLength;
         }
 
         return -1;
@@ -73,7 +71,21 @@ class Player {
      * @return {Number}     The y position of the immediate solid tile to the left; else, -1
      */
     checkLeftWall() {
-        // if there is a wall to the left, return the x position of the wall; else -1
+        let leftWallCheck = false;
+
+        let i = Math.floor(this.y / unitLength);
+        let j = Math.floor(this.x / unitLength) - 1;
+        leftWallCheck = leftWallCheck || solids.has(tilemap.cells[i * tilemap.n + j]);
+        // square(j * unitLength - this.x + camera.x, i * unitLength - this.y + camera.y, unitLength);
+
+        i = Math.floor((this.y + this.HEIGHT) / unitLength);
+        leftWallCheck = leftWallCheck || solids.has(tilemap.cells[i * tilemap.n + j]);
+        // square(j * unitLength - this.x + camera.x, i * unitLength - this.y + camera.y, unitLength);
+
+        if (leftWallCheck) {
+            return j * unitLength;
+        }
+
         return -1;
     }
 
@@ -81,18 +93,18 @@ class Player {
      * If player is on a platform tile, let them pass through the platform by moving them 1 unit down
      */
     dropDownPlatform() {
-        let i = Math.floor((player.y + unitLength) / unitLength) + 1;
-        let j = Math.floor((player.x + 9) / unitLength);
+        let i = Math.floor((this.y + this.HEIGHT) / unitLength) + 1;
+        let j = Math.floor((this.x) / unitLength);
         if (!platforms.has(tilemap.cells[i * tilemap.n + j])) {
             return;
         }
 
-        j = Math.floor((player.x + unitLength - 9) / unitLength);
+        j = Math.floor((this.x + this.WIDTH) / unitLength);
         if (!platforms.has(tilemap.cells[i * tilemap.n + j])) {
             return;
         }
 
-        player.y += 1;
+        this.y += 1;
     }
 
     /**
@@ -110,29 +122,37 @@ class Player {
             }
         }
 
-        // const rightWall = this.checkRightWall();
-
-        if (this.direction === 0) {
-            if ((this.vx - this.ACCELERATION) * this.direction < 0) {
-                this.vx -= this.ACCELERATION;
-            } else {
-                this.vx = 0;
-            }
+        const rightWall = this.checkRightWall();
+        const leftWall = this.checkLeftWall();
+        if (rightWall > 0 && this.x + this.WIDTH + this.vx > rightWall - 1) {
+            this.x = rightWall - this.WIDTH - 1;
+            this.vx = 0;
+        } else if (leftWall > 0 && this.x - this.vx < leftWall + unitLength + 1) {
+            this.x = leftWall + unitLength + 1;
+            this.vx = 0;
         } else {
-            if (Math.abs(this.vx) <= this.MAX_SPEED) {
-                this.vx += this.ACCELERATION;
+            if (this.direction === 0) {
+                if ((this.vx - this.ACCELERATION) * this.direction < 0) {
+                    this.vx -= this.ACCELERATION;
+                } else {
+                    this.vx = 0;
+                }
             } else {
-                this.vx = this.MAX_SPEED;
+                if (Math.abs(this.vx) <= this.MAX_SPEED) {
+                    this.vx += this.ACCELERATION;
+                } else {
+                    this.vx = this.MAX_SPEED;
+                }
             }
         }
 
         this.x += this.vx * this.direction;
 
         const ground = this.checkGround();
-        this.grounded = ground > 0 && this.y + this.vy >= ground - unitLength - 1;
+        this.grounded = ground > 0 && this.y + this.vy >= ground - this.HEIGHT - 1;
         if (this.grounded) {
             this.vy = 0;
-            this.y = ground - unitLength - 1;
+            this.y = ground - this.HEIGHT - 1;
             if (this.isLanding) {
                 landSound.play();
                 this.isLanding = false;
@@ -141,23 +161,24 @@ class Player {
             this.vy += this.GRAVITY;
             this.y += this.vy;
             this.animIdx = 4;
-            player.isLanding = true;
+            this.isLanding = true;
         }
+
+        this.rigidBody.x = this.x;
+        this.rigidBody.y = this.y;
     }
 
     /**
      * Draws player on the canvas
      */
     draw() {
-        // noFill();
-        // stroke(0, 255, 0);
-        // rect(camera.x + unitLength / 6, camera.y + unitLength / 4, unitLength - unitLength / 3, unitLength - unitLength / 4);
+        // this.rigidBody.draw();
 
         if (this.facingRight) {
-            image(spriteSheet, camera.x, camera.y, unitLength, unitLength, (18 + this.animIdx) * 16, 7 * 16 + 1, 16, 15);
+            image(spriteSheet, camera.x, camera.y, unitLength - 6, unitLength - 6, (18 + this.animIdx) * 16 + 1, 7 * 16 + 3, 14, 13);
         } else {
             scale(-1, 1);
-            image(spriteSheet, (768 - unitLength) - (camera.x + spriteSheet.width), camera.y, unitLength, unitLength, (18 + this.animIdx) * 16, 7 * 16 + 1, 16, 15);
+            image(spriteSheet, (774 - unitLength) - (camera.x + spriteSheet.width), camera.y, unitLength - 6, unitLength - 6, (18 + this.animIdx) * 16 + 1, 7 * 16 + 3, 14, 13);
         }
     }
 }

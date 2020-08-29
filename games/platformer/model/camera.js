@@ -9,8 +9,8 @@ class Camera {
     update() {
         if (player.x < this.center_x) {
             this.x = player.x
-        } else if (player.x - 832 > this.center_x) {
-            this.x = player.x - 832;
+        } else if (player.x - tilemap.n * (unitLength - 15) > this.center_x) {
+            this.x = player.x - tilemap.n * (unitLength - 15);
         } else {
             this.x = this.center_x;
         }

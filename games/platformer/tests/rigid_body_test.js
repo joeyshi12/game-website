@@ -8,6 +8,10 @@ let rb1 = new RigidBody(100, 100, 50, 50, mass = 5);
 let rb2 = new RigidBody(300, 100, 50, 50, mass = 5);
 let rb3 = new RigidBody(100, 250, 50, 70, mass = 10);
 
+const unitLength = 0;
+let camera;
+let player;
+
 let ax = 0;
 let ay = 0;
 let curr_body = 4;
@@ -17,6 +21,8 @@ let rb_list = [top_wall, bottom_wall, right_wall, left_wall, rb1, rb2, rb3];
 function setup() {
     const canvas = createCanvas(width, height);
     canvas.parent("sketch-holder");
+    camera = new Camera(0, 0);
+    player = new Player(0, 0);
 }
 
 function mouseClicked() {
