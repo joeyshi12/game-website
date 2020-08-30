@@ -7,7 +7,7 @@ class Tilemap {
     }
 
     draw(shift_x = 0, shift_y = 0) {
-        for (var i = 0; i < this.m * this.n; i++) {
+        for (let i = 0; i < this.m * this.n; i++) {
             const x = (i % this.n) * unitLength;
             const y = Math.floor(i / this.n) * unitLength;
             const sx = (this.cells[i] % 48) * 16;

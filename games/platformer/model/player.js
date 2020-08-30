@@ -118,6 +118,15 @@ class Player {
     }
 
     /**
+     * returns true if player center is in spike tile; else false
+     */
+    isDead(map) {
+        let i = Math.floor((this.y + this.HEIGHT / 2) / unitLength);
+        let j = Math.floor((this.x + this.WIDTH / 2) / unitLength);
+        return map[i * n + j] === 22;
+    }
+
+    /**
      * updates player animation, velocity, position
      */
     update(map) {

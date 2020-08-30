@@ -5,6 +5,7 @@ let inconsolata, spriteSheet, jumpSound, landSound;
 let game_run;
 let start_menu;
 let started = false;
+let paused = false;
 
 function preload() {
     inconsolata = loadFont('games/platformer/assets/inconsolata.otf');
@@ -23,7 +24,13 @@ function setup() {
 }
 
 function keyPressed() {
-    game_run.keyPressed();
+    if (keyCode === 27 && started) {
+        paused = !paused;
+    }
+
+    if (!paused) {
+        game_run.keyPressed();
+    }
 }
 
 function keyReleased() {
@@ -39,8 +46,14 @@ function mousePressed() {
 function draw() {
     if (started) {
         background(71, 45, 60);
-        game_run.update();
-        game_run.draw();
+        if (paused) {
+            text("PAUSED", width / 2 - 30, height / 2);
+            game_run.draw();
+            text("PAUSED", width / 2 - 30, height / 2);
+        } else {
+            game_run.update();
+            game_run.draw();
+        }
     } else {
         background(24, 24, 24);
         textSize(32);

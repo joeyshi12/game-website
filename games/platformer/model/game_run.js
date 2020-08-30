@@ -15,7 +15,16 @@ class GameRun {
             this.player.x = n * unitLength - 10;
         }
 
-        this.player.update(this.tilemaps[this.mapIdx].cells);
+        if (this.player.isDead(this.tilemaps[this.mapIdx].cells)) {
+            this.player.x = 100;
+            this.player.y = 100;
+            this.player.vx = 0;
+            this.player.vy = 0;
+            this.mapIdx = 0;
+        } else {
+            this.player.update(this.tilemaps[this.mapIdx].cells);
+        }
+
         this.camera.update(this.player.x, this.player.y);
     }
 
