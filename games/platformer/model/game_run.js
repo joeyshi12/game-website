@@ -24,7 +24,7 @@ class GameRun {
             this.player.jump();
             jumpSound.play();
         } else if (keyCode === 83) {
-            this.player.dropDownPlatform();
+            this.player.dropDownPlatform(this.tilemaps[this.mapIdx].cells);
         } else if (keyCode === 65) {
             this.player.direction = -1;
             this.player.facingRight = false;
