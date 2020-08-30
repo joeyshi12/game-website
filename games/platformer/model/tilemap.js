@@ -6,13 +6,13 @@ class Tilemap {
         this.spriteSheet = null;
     }
 
-    draw() {
+    draw(shift_x = 0, shift_y = 0) {
         for (var i = 0; i < this.m * this.n; i++) {
             const x = (i % this.n) * unitLength;
             const y = Math.floor(i / this.n) * unitLength;
             const sx = (this.cells[i] % 48) * 16;
             const sy = Math.floor(this.cells[i] / 48) * 16;
-            image(spriteSheet, x - player.x + camera.x, y - player.y + camera.y, unitLength, unitLength, sx, sy, 15.5, 16);
+            image(spriteSheet, x - shift_x, y - shift_y, unitLength, unitLength, sx, sy, 15.5, 16);
         }
     }
 }
@@ -23,9 +23,7 @@ const c = 23 + 6 * 48;
 const d = 19 + 4 * 48;
 const e = 18 + 4 * 48;
 const I = 10 + 48 * 3;
-
 const s = 21 + 5 * 48;
-
 const h1 = 5 + 12 * 48;
 const h2 = 6 + 12 * 48;
 const h3 = 7 + 12 * 48;

@@ -65,9 +65,9 @@ class RigidBody {
         this.y += this.vy;
     }
 
-    draw() {
+    draw(shift_x = 0, shift_y = 0) {
         noFill();
         stroke(100, 255, 100);
-        rect(this.x - player.x + camera.x, this.y - player.y + camera.y, this.width, this.height);
+        rect(this.x - shift_x, this.y - shift_y, this.width, this.height);
     }
 }

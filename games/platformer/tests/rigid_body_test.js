@@ -21,8 +21,6 @@ let rb_list = [top_wall, bottom_wall, right_wall, left_wall, rb1, rb2, rb3];
 function setup() {
     const canvas = createCanvas(width, height);
     canvas.parent("sketch-holder");
-    camera = new Camera(0, 0);
-    player = new Player(0, 0);
 }
 
 function mouseClicked() {

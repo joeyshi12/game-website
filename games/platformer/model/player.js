@@ -5,6 +5,7 @@ class Player {
     ANIMATION_BUFFER = 6;
     WIDTH = unitLength - 6;
     HEIGHT = unitLength - 6;
+    JUMP_VELOCITY = -9;
 
     constructor(x, y) {
         this.x = x;
@@ -24,16 +25,16 @@ class Player {
      * If there is a solid / platform tile immediately below player, returns that y position; else return -1
      * @return {Number}     The y position of the immediate solid / platform tile below; else, -1
      */
-    checkGround() {
+    checkGround(map) {
         let groundCheck = false;
 
         let i = Math.floor((this.y + this.HEIGHT) / unitLength) + 1;
         let j = Math.floor(this.x / unitLength);
-        groundCheck = groundCheck || solids.has(tilemap.cells[i * tilemap.n + j]) || platforms.has(tilemap.cells[i * tilemap.n + j]);
+        groundCheck = groundCheck || solids.has(map[i * n + j]) || platforms.has(map[i * n + j]);
         // square(j * unitLength - this.x + camera.x, i * unitLength - this.y + camera.y, unitLength);
 
         j = Math.floor((this.x + this.WIDTH) / unitLength);
-        groundCheck = groundCheck || solids.has(tilemap.cells[i * tilemap.n + j]) || platforms.has(tilemap.cells[i * tilemap.n + j]);
+        groundCheck = groundCheck || solids.has(map[i * n + j]) || platforms.has(map[i * n + j]);
         // square(j * unitLength - this.x + camera.x, i * unitLength - this.y + camera.y, unitLength);
 
         if (groundCheck) {
@@ -47,16 +48,16 @@ class Player {
      * If there is a solid tile immediately to the right of player, returns that x position; else return -1
      * @return {Number}     The y position of the immediate solid tile to the right; else, -1
      */
-    checkRightWall() {
+    checkRightWall(map) {
         let rightWallCheck = false;
 
         let i = Math.floor((this.y) / unitLength);
         let j = Math.floor((this.x + this.WIDTH) / unitLength) + 1;
-        rightWallCheck = rightWallCheck || solids.has(tilemap.cells[i * tilemap.n + j]);
+        rightWallCheck = rightWallCheck || solids.has(map[i * n + j]);
         // square(j * unitLength - this.x + camera.x, i * unitLength - this.y + camera.y, unitLength);
 
         i = Math.floor((this.y + this.HEIGHT) / unitLength);
-        rightWallCheck = rightWallCheck || solids.has(tilemap.cells[i * tilemap.n + j]);
+        rightWallCheck = rightWallCheck || solids.has(map[i * n + j]);
         // square(j * unitLength - this.x + camera.x, i * unitLength - this.y + camera.y, unitLength);
 
         if (rightWallCheck) {
@@ -70,16 +71,16 @@ class Player {
      * If there is a solid tile immediately to the left of player, returns that x position; else return -1
      * @return {Number}     The y position of the immediate solid tile to the left; else, -1
      */
-    checkLeftWall() {
+    checkLeftWall(map) {
         let leftWallCheck = false;
 
         let i = Math.floor(this.y / unitLength);
         let j = Math.floor(this.x / unitLength) - 1;
-        leftWallCheck = leftWallCheck || solids.has(tilemap.cells[i * tilemap.n + j]);
+        leftWallCheck = leftWallCheck || solids.has(map[i * n + j]);
         // square(j * unitLength - this.x + camera.x, i * unitLength - this.y + camera.y, unitLength);
 
         i = Math.floor((this.y + this.HEIGHT) / unitLength);
-        leftWallCheck = leftWallCheck || solids.has(tilemap.cells[i * tilemap.n + j]);
+        leftWallCheck = leftWallCheck || solids.has(map[i * n + j]);
         // square(j * unitLength - this.x + camera.x, i * unitLength - this.y + camera.y, unitLength);
 
         if (leftWallCheck) {
@@ -90,17 +91,26 @@ class Player {
     }
 
     /**
+     * takes player off ground and sets initial vertical velocity to -9
+     */
+    jump() {
+        this.y -= 1;
+        this.vy = this.JUMP_VELOCITY;
+        this.grounded = false;
+    }
+
+    /**
      * If player is on a platform tile, let them pass through the platform by moving them 1 unit down
      */
-    dropDownPlatform() {
+    dropDownPlatform(map) {
         let i = Math.floor((this.y + this.HEIGHT) / unitLength) + 1;
         let j = Math.floor((this.x) / unitLength);
-        if (!platforms.has(tilemap.cells[i * tilemap.n + j])) {
+        if (!platforms.has(map[i * n + j])) {
             return;
         }
 
         j = Math.floor((this.x + this.WIDTH) / unitLength);
-        if (!platforms.has(tilemap.cells[i * tilemap.n + j])) {
+        if (!platforms.has(map[i * n + j])) {
             return;
         }
 
@@ -110,7 +120,7 @@ class Player {
     /**
      * updates player animation, velocity, position
      */
-    update() {
+    update(map) {
         if (this.animTimer > 0) {
             this.animTimer--;
         } else {
@@ -122,8 +132,8 @@ class Player {
             }
         }
 
-        const rightWall = this.checkRightWall();
-        const leftWall = this.checkLeftWall();
+        const rightWall = this.checkRightWall(map);
+        const leftWall = this.checkLeftWall(map);
         if (rightWall > 0 && this.x + this.WIDTH + this.vx > rightWall - 1) {
             this.x = rightWall - this.WIDTH - 1;
             this.vx = 0;
@@ -148,7 +158,7 @@ class Player {
 
         this.x += this.vx * this.direction;
 
-        const ground = this.checkGround();
+        const ground = this.checkGround(map);
         this.grounded = ground > 0 && this.y + this.vy >= ground - this.HEIGHT - 1;
         if (this.grounded) {
             this.vy = 0;
@@ -171,14 +181,14 @@ class Player {
     /**
      * Draws player on the canvas
      */
-    draw() {
-        // this.rigidBody.draw();
+    draw(shift_x = 0, shift_y = 0) {
+        // this.rigidBody.draw(shift_x, shift_y);
 
         if (this.facingRight) {
-            image(spriteSheet, camera.x, camera.y, unitLength - 6, unitLength - 6, (18 + this.animIdx) * 16 + 1, 7 * 16 + 3, 14, 13);
+            image(spriteSheet, this.x - shift_x, this.y - shift_y, unitLength - 6, unitLength - 6, (18 + this.animIdx) * 16 + 1, 7 * 16 + 3, 14, 13);
         } else {
             scale(-1, 1);
-            image(spriteSheet, (774 - unitLength) - (camera.x + spriteSheet.width), camera.y, unitLength - 6, unitLength - 6, (18 + this.animIdx) * 16 + 1, 7 * 16 + 3, 14, 13);
+            image(spriteSheet, (774 - unitLength) - (this.x - shift_x + spriteSheet.width), this.y - shift_y, unitLength - 6, unitLength - 6, (18 + this.animIdx) * 16 + 1, 7 * 16 + 3, 14, 13);
         }
     }
 }
