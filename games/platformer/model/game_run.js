@@ -3,7 +3,7 @@ class GameRun {
         this.camera = new Camera((width - unitLength) / 2, height / 2);
         this.tilemaps = [new Tilemap(cells1, m, n), new Tilemap(cells2, m, n)];
         this.mapIdx = 0;
-        this.player = new Player(100, 100);
+        this.player = new Player(1040, 180);
     }
 
     update() {
@@ -16,8 +16,8 @@ class GameRun {
         }
 
         if (this.player.isDead(this.tilemaps[this.mapIdx].cells)) {
-            this.player.x = 100;
-            this.player.y = 100;
+            this.player.x = 1040;
+            this.player.y = 180;
             this.player.vx = 0;
             this.player.vy = 0;
             this.mapIdx = 0;
