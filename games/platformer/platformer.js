@@ -41,6 +41,8 @@ function mousePressed() {
     if (startMenu.buttons[0].isHovering()) {
         started = true;
     }
+
+    gameRun.mousePressed();
 }
 
 function draw() {
