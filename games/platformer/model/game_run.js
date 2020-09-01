@@ -21,7 +21,6 @@ class GameRun {
             this.player.y = 100;
             this.player.vx = 0;
             this.player.vy = 0;
-            this.mapIdx = 0;
         } else {
             this.player.update(this.tilemaps[this.mapIdx].cells);
         }

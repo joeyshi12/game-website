@@ -91,6 +91,29 @@ class Player {
     }
 
     /**
+     * If there is a solid / platform tile immediately above player, returns that y position; else return -1
+     * @return {Number}     The y position of the immediate solid / platform tile above; else, -1
+     */
+    checkCeiling(map) {
+        let ceilingCheck = false;
+
+        let i = Math.floor((this.y + this.HEIGHT) / unitLength) - 1;
+        let j = Math.floor(this.x / unitLength);
+        ceilingCheck = ceilingCheck || solids.has(map[i * n + j]);
+        // square(j * unitLength - this.x + gameRun.camera.x, i * unitLength - this.y + gameRun.camera.y, unitLength);
+
+        j = Math.floor((this.x + this.WIDTH) / unitLength);
+        ceilingCheck = ceilingCheck || solids.has(map[i * n + j]);
+        // square(j * unitLength - this.x + gameRun.camera.x, i * unitLength - this.y + gameRun.camera.y, unitLength);
+
+        if (ceilingCheck) {
+            return (i + 1) * unitLength;
+        }
+
+        return -1;
+    }
+
+    /**
      * takes player off ground and sets initial vertical velocity to -9
      */
     jump() {
@@ -167,6 +190,7 @@ class Player {
 
         this.x += this.vx * this.direction;
 
+        const ceiling = this.checkCeiling(map);
         const ground = this.checkGround(map);
         this.grounded = ground > 0 && this.y + this.vy >= ground - this.HEIGHT - 1;
         if (this.grounded) {
@@ -177,8 +201,13 @@ class Player {
                 this.isLanding = false;
             }
         } else {
-            this.vy += this.GRAVITY;
-            this.y += this.vy;
+            if (ceiling > 0 && this.y + this.vy <= ceiling + 1) {
+                this.vy = 1;
+                this.y = ceiling + 1;
+            } else {
+                this.vy += this.GRAVITY;
+                this.y += this.vy;
+            }
             this.animIdx = 4;
             this.isLanding = true;
         }
