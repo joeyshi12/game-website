@@ -49,7 +49,7 @@ class GameRun {
 
     keyReleased() {
         if (keyCode === 87 && this.player.vy < 0) {
-            this.player.vy *= 0.2;
+            this.player.vy *= 0.3;
         } else if (keyCode === 65 && this.player.direction < 0) {
             this.player.direction = 0;
         } else if (keyCode === 68 && this.player.direction > 0) {
