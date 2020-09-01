@@ -60,7 +60,7 @@ function draw() {
         background(24, 24, 24);
         textSize(32);
         fill(255, 255, 255);
-        text("A Cold Place", 200, 180);
+        text("Platformer", 220, 180);
         startMenu.draw();
     }
 }

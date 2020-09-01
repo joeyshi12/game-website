@@ -3,7 +3,7 @@ class GameRun {
         this.camera = new Camera((width - unitLength) / 2, height / 2);
         this.tilemaps = [new Tilemap(cells1, m, n), new Tilemap(cells2, m, n)];
         this.mapIdx = 0;
-        this.player = new Player(100, 100);
+        this.player = new Player(120, 100);
         this.hierarchy = [];
     }
 
@@ -11,15 +11,13 @@ class GameRun {
         if (this.mapIdx === 0 && this.player.x > n * unitLength - 10) {
             this.mapIdx = 1;
             this.player.x = -10;
-            this.player.y -= unitLength;
         } else if (this.mapIdx === 1 && this.player.x + this.player.WIDTH - 10 < 0) {
             this.mapIdx = 0;
             this.player.x = n * unitLength - 10;
-            this.player.y += unitLength;
         }
 
         if (this.player.isDead(this.tilemaps[this.mapIdx].cells)) {
-            this.player.x = 100;
+            this.player.x = 120;
             this.player.y = 100;
             this.player.vx = 0;
             this.player.vy = 0;
