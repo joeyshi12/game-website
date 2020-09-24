@@ -171,23 +171,10 @@ class Player {
             this.x = rightWall - this.WIDTH - 1;
             this.vx = 0;
         } else if (leftWall > 0 && this.x - this.vx < leftWall + unitLength + 1 && this.vx * this.direction < 0) {
-            console.log("hit left wall");
             this.x = leftWall + unitLength + 1;
             this.vx = 0;
         } else {
-            if (this.direction === 0) {
-                if ((this.vx - this.ACCELERATION) * this.direction < 0) {
-                    this.vx -= this.ACCELERATION;
-                } else {
-                    this.vx = 0;
-                }
-            } else {
-                if (Math.abs(this.vx) <= this.MAX_SPEED) {
-                    this.vx += this.ACCELERATION;
-                } else {
-                    this.vx = this.MAX_SPEED;
-                }
-            }
+            this.vx = this.direction? Math.min(this.MAX_SPEED, this.vx + this.ACCELERATION): Math.max(0, this.vx - this.ACCELERATION);
         }
 
         this.x += this.vx * this.direction;
