@@ -166,10 +166,12 @@ class Player {
 
         const rightWall = this.checkRightWall(map);
         const leftWall = this.checkLeftWall(map);
-        if (rightWall > 0 && this.x + this.WIDTH + this.vx > rightWall - 1) {
+        if (rightWall > 0 && this.x + this.WIDTH + this.vx > rightWall - 1 && this.vx * this.direction > 0) {
+            console.log("hit right wall");
             this.x = rightWall - this.WIDTH - 1;
             this.vx = 0;
-        } else if (leftWall > 0 && this.x - this.vx < leftWall + unitLength + 1) {
+        } else if (leftWall > 0 && this.x - this.vx < leftWall + unitLength + 1 && this.vx * this.direction < 0) {
+            console.log("hit left wall");
             this.x = leftWall + unitLength + 1;
             this.vx = 0;
         } else {
