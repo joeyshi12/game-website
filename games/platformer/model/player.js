@@ -30,9 +30,9 @@ class Player extends GameObject {
      * If player is on a platform tile, let them pass through the platform by moving them 1 unit down
      */
     dropDownPlatform(map) {
-        let i = Math.floor((this.y + this.HEIGHT) / unitLength) + 1;
+        let i = Math.floor((this.y + this.height) / unitLength) + 1;
 
-        for (let j = Math.floor((this.x) / unitLength); j <= Math.floor((this.x + this.WIDTH) / unitLength); j++) {
+        for (let j = Math.floor((this.x) / unitLength); j <= Math.floor((this.x + this.width) / unitLength); j++) {
             if (!platforms.has(map[i * n + j])) {
                 return;
             }
