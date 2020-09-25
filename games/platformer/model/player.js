@@ -1,116 +1,20 @@
-class Player {
+class Player extends GameObject {
     ACCELERATION = 0.4;
     GRAVITY = 0.4;
     MAX_SPEED = 4;
     ANIMATION_BUFFER = 6;
-    WIDTH = unitLength - 6;
-    HEIGHT = unitLength - 6;
     JUMP_VELOCITY = -9;
 
     constructor(x, y) {
-        this.x = x;
-        this.y = y;
+        super(x, y, unitLength - 6, unitLength - 6);
         this.vx = 0;
         this.vy = 0;
-        this.rigidBody = new RigidBody(x, y, this.WIDTH, this.HEIGHT);
         this.direction = 0;
         this.animIdx = 0;
         this.animTimer = this.ANIMATION_BUFFER;
         this.grounded = false;
         this.facingRight = true;
         this.isLanding = false;
-    }
-
-    /**
-     * If there is a solid / platform tile immediately below player, returns that y position; else return -1
-     * @return {Number}     The y position of the immediate solid / platform tile below; else, -1
-     */
-    checkGround(map) {
-        let groundCheck = false;
-
-        let i = Math.floor((this.y + this.HEIGHT) / unitLength) + 1;
-        let j = Math.floor(this.x / unitLength);
-        groundCheck = groundCheck || solids.has(map[i * n + j]) || platforms.has(map[i * n + j]);
-        // square(j * unitLength - this.x + camera.x, i * unitLength - this.y + camera.y, unitLength);
-
-        j = Math.floor((this.x + this.WIDTH) / unitLength);
-        groundCheck = groundCheck || solids.has(map[i * n + j]) || platforms.has(map[i * n + j]);
-        // square(j * unitLength - this.x + camera.x, i * unitLength - this.y + camera.y, unitLength);
-
-        if (groundCheck) {
-            return i * unitLength;
-        }
-
-        return -1;
-    }
-
-    /**
-     * If there is a solid tile immediately to the right of player, returns that x position; else return -1
-     * @return {Number}     The y position of the immediate solid tile to the right; else, -1
-     */
-    checkRightWall(map) {
-        let rightWallCheck = false;
-
-        let i = Math.floor((this.y) / unitLength);
-        let j = Math.floor((this.x + this.WIDTH) / unitLength) + 1;
-        rightWallCheck = rightWallCheck || solids.has(map[i * n + j]);
-        // square(j * unitLength - this.x + camera.x, i * unitLength - this.y + camera.y, unitLength);
-
-        i = Math.floor((this.y + this.HEIGHT) / unitLength);
-        rightWallCheck = rightWallCheck || solids.has(map[i * n + j]);
-        // square(j * unitLength - this.x + camera.x, i * unitLength - this.y + camera.y, unitLength);
-
-        if (rightWallCheck) {
-            return j * unitLength;
-        }
-
-        return -1;
-    }
-
-    /**
-     * If there is a solid tile immediately to the left of player, returns that x position; else return -1
-     * @return {Number}     The y position of the immediate solid tile to the left; else, -1
-     */
-    checkLeftWall(map) {
-        let leftWallCheck = false;
-
-        let i = Math.floor(this.y / unitLength);
-        let j = Math.floor(this.x / unitLength) - 1;
-        leftWallCheck = leftWallCheck || solids.has(map[i * n + j]);
-        // square(j * unitLength - this.x + camera.x, i * unitLength - this.y + camera.y, unitLength);
-
-        i = Math.floor((this.y + this.HEIGHT) / unitLength);
-        leftWallCheck = leftWallCheck || solids.has(map[i * n + j]);
-        // square(j * unitLength - this.x + camera.x, i * unitLength - this.y + camera.y, unitLength);
-
-        if (leftWallCheck) {
-            return j * unitLength;
-        }
-
-        return -1;
-    }
-
-    /**
-     * If there is a solid / platform tile immediately above player, returns that y position; else return -1
-     * @return {Number}     The y position of the immediate solid / platform tile above; else, -1
-     */
-    checkCeiling(map) {
-        let ceilingCheck = false;
-
-        let i = Math.floor((this.y + this.HEIGHT) / unitLength) - 1;
-        let j = Math.floor(this.x / unitLength);
-        ceilingCheck = ceilingCheck || solids.has(map[i * n + j]);
-        // square(j * unitLength - this.x + gameRun.camera.x, i * unitLength - this.y + gameRun.camera.y, unitLength);
-
-        j = Math.floor((this.x + this.WIDTH) / unitLength);
-        ceilingCheck = ceilingCheck || solids.has(map[i * n + j]);
-        // square(j * unitLength - this.x + gameRun.camera.x, i * unitLength - this.y + gameRun.camera.y, unitLength);
-
-        if (ceilingCheck) {
-            return (i + 1) * unitLength;
-        }
-
-        return -1;
     }
 
     /**
@@ -127,14 +31,11 @@ class Player {
      */
     dropDownPlatform(map) {
         let i = Math.floor((this.y + this.HEIGHT) / unitLength) + 1;
-        let j = Math.floor((this.x) / unitLength);
-        if (!platforms.has(map[i * n + j])) {
-            return;
-        }
 
-        j = Math.floor((this.x + this.WIDTH) / unitLength);
-        if (!platforms.has(map[i * n + j])) {
-            return;
+        for (let j = Math.floor((this.x) / unitLength); j <= Math.floor((this.x + this.WIDTH) / unitLength); j++) {
+            if (!platforms.has(map[i * n + j])) {
+                return;
+            }
         }
 
         this.y += 1;
@@ -144,8 +45,8 @@ class Player {
      * returns true if player center is in spike tile; else false
      */
     isDead(map) {
-        let i = Math.floor((this.y + this.HEIGHT / 2) / unitLength);
-        let j = Math.floor((this.x + this.WIDTH / 2) / unitLength);
+        let i = Math.floor((this.y + this.height / 2) / unitLength);
+        let j = Math.floor((this.x + this.width / 2) / unitLength);
         return map[i * n + j] === 22;
     }
 
@@ -166,11 +67,11 @@ class Player {
 
         const rightWall = this.checkRightWall(map);
         const leftWall = this.checkLeftWall(map);
-        if (rightWall > 0 && this.x + this.WIDTH + this.vx > rightWall - 1 && this.vx * this.direction > 0) {
+        if (rightWall >= 0 && this.x + this.width + this.vx > rightWall - 1 && this.vx * this.direction > 0) {
             console.log("hit right wall");
-            this.x = rightWall - this.WIDTH - 1;
+            this.x = rightWall - this.width - 1;
             this.vx = 0;
-        } else if (leftWall > 0 && this.x - this.vx < leftWall + unitLength + 1 && this.vx * this.direction < 0) {
+        } else if (leftWall >= 0 && this.x - this.vx < leftWall + unitLength + 1 && this.vx * this.direction < 0) {
             this.x = leftWall + unitLength + 1;
             this.vx = 0;
         } else {
@@ -181,16 +82,16 @@ class Player {
 
         const ceiling = this.checkCeiling(map);
         const ground = this.checkGround(map);
-        this.grounded = ground > 0 && this.y + this.vy >= ground - this.HEIGHT - 1;
+        this.grounded = ground >= 0 && this.y + this.vy >= ground - this.height - 1;
         if (this.grounded) {
             this.vy = 0;
-            this.y = ground - this.HEIGHT - 1;
+            this.y = ground - this.height - 1;
             if (this.isLanding) {
                 landSound.play();
                 this.isLanding = false;
             }
         } else {
-            if (ceiling > 0 && this.y + this.vy <= ceiling + 1) {
+            if (ceiling >= 0 && this.y + this.vy <= ceiling + 1) {
                 this.vy = 1;
                 this.y = ceiling + 1;
             } else {
@@ -200,17 +101,12 @@ class Player {
             this.animIdx = 4;
             this.isLanding = true;
         }
-
-        this.rigidBody.x = this.x;
-        this.rigidBody.y = this.y;
     }
 
     /**
      * Draws player on the canvas
      */
-    draw(shift_x = 0, shift_y = 0) {
-        // this.rigidBody.draw(shift_x, shift_y);
-
+    draw(shift_x, shift_y) {
         if (this.facingRight) {
             image(spriteSheet, this.x - shift_x, this.y - shift_y, unitLength - 6, unitLength - 6, (18 + this.animIdx) * 16 + 1, 7 * 16 + 3, 14, 13);
         } else {
