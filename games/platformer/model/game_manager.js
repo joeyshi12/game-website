@@ -1,6 +1,6 @@
 class GameManager {
     constructor() {
-        this.camera = new Camera(width / 2, height / 2, (n - 1) * unitLength);
+        this.camera = new Camera(width / 2, height / 2, n * unitLength);
         this.tilemaps = [new Tilemap(cells1, m, n), new Tilemap(cells2, m, n)];
         this.mapIdx = 0;
         this.player = new Player(120, 100);

@@ -68,7 +68,6 @@ class Player extends GameObject {
         const rightWall = this.checkRightWall(map);
         const leftWall = this.checkLeftWall(map);
         if (rightWall >= 0 && this.x + this.width + this.vx > rightWall - 1 && this.vx * this.direction > 0) {
-            console.log("hit right wall");
             this.x = rightWall - this.width - 1;
             this.vx = 0;
         } else if (leftWall >= 0 && this.x - this.vx < leftWall + unitLength + 1 && this.vx * this.direction < 0) {
