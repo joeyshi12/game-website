@@ -1,5 +1,5 @@
-const n = 21;
-const unitLength = 25;
+const n = 22;
+const unitLength = 20;
 
 class Snake {
     constructor() {
@@ -83,14 +83,14 @@ class GameRun {
 
             if (this.snake.xpos[0] === this.food.x && this.snake.ypos[0] === this.food.y) {
                 this.snake.grow();
-                this.food.x = Math.floor(Math.random() * (n - 2) + 1);
-                this.food.y = Math.floor(Math.random() * (n - 2) + 1);
+                this.food.x = Math.floor(Math.random() * (n - 4) + 2);
+                this.food.y = Math.floor(Math.random() * (n - 4) + 2);
 
                 while (true) {
                     let appleMisplaced = false;
 
-                    for (var i = 0; i < this.snake.size; i++) {
-                        if (this.snake.xpos[0] === this.food.x && this.snake.ypos[0] === this.food.y) {
+                    for (let i = 0; i < this.snake.size; i++) {
+                        if (this.snake.xpos[i] === this.food.x && this.snake.ypos[i] === this.food.y) {
                             appleMisplaced = true;
                             break
                         }
@@ -149,10 +149,12 @@ class GameRun {
             textSize(30);
             text('yuo died', 64, 80);
             text('score: ' + (this.snake.size - 3), 64, 120);
+            text('ctrl+r to restart', 64, 160);
         }
     }
 }
 
+let canvas;
 let gameRun = new GameRun();
 
 function preload() {
@@ -160,18 +162,23 @@ function preload() {
 }
 
 function setup() {
-    var canvas = createCanvas(n * unitLength, n * unitLength);
+    canvas = createCanvas(n * unitLength, n * unitLength);
     canvas.parent("sketch-holder");
+    canvas.center('horizontal');
 }
 
 function keyPressed() {
     gameRun.keyPressed(keyCode);
 }
 
+function windowResized() {
+    canvas.center('horizontal');
+}
+
 function draw() {
     background(255);
     fill(255, 255, 255);
-    frameRate(12);
+    frameRate(14);
     gameRun.draw();
     gameRun.update();
 }

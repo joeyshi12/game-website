@@ -54,7 +54,7 @@ class Ball {
     }
 }
 
-
+let canvas;
 let player = new Paddle(padding);
 let opponent = new Paddle(width - padding - paddle_width);
 let balls = [new Ball()];
@@ -74,10 +74,14 @@ function preload() {
 }
 
 function setup() {
-    var canvas = createCanvas(width, height);
+    canvas = createCanvas(width, height);
     canvas.parent("sketch-holder");
+    canvas.center('horizontal');
 }
 
+function windowResized() {
+    canvas.center('horizontal');
+}
 
 function spawnHell() {
     for (let i = 0; i < 50; i++) {
@@ -138,9 +142,8 @@ function draw() {
     }
 
     if (balls.length !== 0) {
-        const n = balls.length;
-        var closestBall = balls[0];
-        var smallestDist = opponent.x - balls[0].x;
+        let closestBall = balls[0];
+        let smallestDist = opponent.x - balls[0].x;
         for (i = 1; i < balls.length; i++) {
             dist = opponent.x - balls[i].x;
             if (dist < smallestDist) {

@@ -212,6 +212,7 @@ class GameRun {
     }
 }
 
+let canvas;
 let gameRun = new GameRun();
 
 function preload() {
@@ -219,8 +220,13 @@ function preload() {
 }
 
 function setup() {
-    var canvas = createCanvas(width, height);
+    canvas = createCanvas(width, height);
     canvas.parent("sketch-holder");
+    canvas.center('horizontal');
+}
+
+function windowResized() {
+    canvas.center('horizontal');
 }
 
 function keyPressed() {

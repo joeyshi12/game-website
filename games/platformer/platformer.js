@@ -1,6 +1,7 @@
 const width = 600;
 const height = 400;
 const unitLength = 32;
+let canvas;
 let inconsolata, spriteSheet, jumpSound, landSound;
 let gameManager;
 let startMenu;
@@ -15,12 +16,17 @@ function preload() {
 }
 
 function setup() {
-    const canvas = createCanvas(width, height);
+    canvas = createCanvas(width, height);
     canvas.parent("sketch-holder");
+    canvas.center('horizontal');
     textFont(inconsolata);
     startMenu = new Page();
     startMenu.createButton((width - 80) / 2, height / 2, 80, 32, "start");
     gameManager = new GameManager();
+}
+
+function windowResized() {
+    canvas.center('horizontal');
 }
 
 function keyPressed() {
