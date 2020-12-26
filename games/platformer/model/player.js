@@ -1,9 +1,9 @@
 class Player extends GameObject {
-    ACCELERATION = 0.4;
+    ACCELERATION = 0.8;
     GRAVITY = 0.4;
     MAX_SPEED = 4;
     ANIMATION_BUFFER = 6;
-    JUMP_VELOCITY = -9;
+    JUMP_VELOCITY = -10;
 
     constructor(x, y) {
         super(x, y, unitLength - 6, unitLength - 6);
@@ -71,19 +71,27 @@ class Player extends GameObject {
     updateHorizontal(map) {
         const rightWall = this.checkRightWall(map);
         const leftWall = this.checkLeftWall(map);
-        if (rightWall >= 0 && this.x + this.width + this.vx > rightWall - 1 && this.facingRight) {
+        if (rightWall !== -1 && this.x + this.width + this.vx > rightWall) {
             this.x = rightWall - this.width - 1;
             this.vx = 0;
-        } else if (leftWall >= 0 && this.x - this.vx < leftWall + unitLength + 1 && !this.facingRight) {
+        } else if (leftWall !== -1 && this.x + this.vx < leftWall + unitLength) {
             this.x = leftWall + unitLength + 1;
             this.vx = 0;
         } else {
-            this.vx = this.direction ? Math.min(this.MAX_SPEED, this.vx + this.ACCELERATION) : Math.max(0, this.vx - this.ACCELERATION);
-            if (this.facingRight) {
-                this.x += this.vx
+            if (this.direction === 0) {
+                if (this.vx > 0) {
+                    this.vx = Math.max(0, this.vx - this.ACCELERATION);
+                } else if (this.vx < 0) {
+                    this.vx = Math.min(0, this.vx + this.ACCELERATION);
+                }
             } else {
-                this.x -= this.vx
+                if (this.direction === 1) {
+                    this.vx = Math.min(this.MAX_SPEED, this.vx + this.ACCELERATION);
+                } else {
+                    this.vx = Math.max(-this.MAX_SPEED, this.vx - this.ACCELERATION);
+                }
             }
+            this.x += this.vx;
         }
     }
 
@@ -105,11 +113,13 @@ class Player extends GameObject {
     }
 
     draw(shift_x, shift_y) {
+        push();
         if (this.facingRight) {
-            image(spriteSheet, this.x - shift_x, this.y - shift_y, unitLength - 6, unitLength - 6, (18 + this.animIdx) * 16 + 1, 7 * 16 + 3, 14, 13);
+            image(spriteSheet, this.x - shift_x, this.y - shift_y, this.width, this.height, (18 + this.animIdx) * 16 + 1, 7 * 16 + 3, 14, 13);
         } else {
             scale(-1, 1);
-            image(spriteSheet, (774 - unitLength) - (this.x - shift_x + spriteSheet.width), this.y - shift_y, unitLength - 6, unitLength - 6, (18 + this.animIdx) * 16 + 1, 7 * 16 + 3, 14, 13);
+            image(spriteSheet, (774 - unitLength) - (this.x - shift_x + spriteSheet.width), this.y - shift_y, this.width, this.height, (18 + this.animIdx) * 16 + 1, 7 * 16 + 3, 14, 13);
         }
+        pop();
     }
 }

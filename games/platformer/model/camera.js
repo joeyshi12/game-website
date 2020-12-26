@@ -15,7 +15,6 @@ class Camera {
         } else {
             this.x = focus_x - this.center_x;
         }
-
         this.y = Math.max(0, focus_y - this.center_y);
     }
 }

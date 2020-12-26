@@ -33,7 +33,6 @@ function keyPressed() {
     if (keyCode === 27 && started) {
         paused = !paused;
     }
-
     if (!paused) {
         gameManager.keyPressed();
     }
@@ -47,7 +46,6 @@ function mousePressed() {
     if (startMenu.buttons[0].isHovering()) {
         started = true;
     }
-
     gameManager.mousePressed();
 }
 

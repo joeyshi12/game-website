@@ -4,6 +4,7 @@ class GameManager {
         this.tilemaps = [new Tilemap(cells1, m, n), new Tilemap(cells2, m, n)];
         this.mapIdx = 0;
         this.player = new Player(120, 100);
+        this.enemies = [new Ghost(800, 220, this.player)];
     }
 
     update() {
@@ -20,6 +21,7 @@ class GameManager {
             this.player.y = 100;
             this.player.vx = 0;
             this.player.vy = 0;
+            this.enemies = [new Ghost(800, 220, this.player)];
         } else {
             this.player.update(this.tilemaps[this.mapIdx].cells);
         }
@@ -27,6 +29,16 @@ class GameManager {
         // for (let i = 0; i < this.hierarchy.length; i++) {
         //     this.hierarchy[i].update();
         // }
+        this.enemies.forEach((ghost) => {
+            if (ghost.collide(this.player)) {
+                this.player.x = 120;
+                this.player.y = 100;
+                this.player.vx = 0;
+                this.player.vy = 0;
+                this.enemies = [new Ghost(800, 220, this.player)];
+            }
+            ghost.update();
+        });
 
         this.camera.update(this.player.x, this.player.y);
     }
@@ -71,5 +83,8 @@ class GameManager {
         const shift_y = this.camera.y;
         this.tilemaps[this.mapIdx].draw(shift_x, shift_y);
         this.player.draw(shift_x, shift_y);
+        this.enemies.forEach((ghost) => {
+            ghost.draw(shift_x, shift_y);
+        });
     }
 }
