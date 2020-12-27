@@ -1,9 +1,9 @@
 class Ghost extends GameObject {
-    ACCELERATION = 0.1;
+    ACCELERATION = 2.5;
     MAX_SPEED = 2.5;
     RANGE = 300;
     theta = 0;
-    update_timer = 8;
+    update_timer = 28;
     trigger = false;
 
     constructor(x, y, target) {
@@ -28,7 +28,7 @@ class Ghost extends GameObject {
         if (this.update_timer > 0) {
             this.update_timer -= 1;
         } else {
-            this.update_timer = 10;
+            this.update_timer = 28;
             if (this.vx**2 + this.vy**2 < this.MAX_SPEED) {
                 this.vx += this.ACCELERATION * dx;
                 this.vy += this.ACCELERATION * dy;

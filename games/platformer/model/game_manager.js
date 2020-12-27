@@ -7,6 +7,14 @@ class GameManager {
         this.enemies = [new Ghost(800, 220, this.player)];
     }
 
+    reset() {
+        this.player.x = 120;
+        this.player.y = 100;
+        this.player.vx = 0;
+        this.player.vy = 0;
+        this.enemies = [new Ghost(800, 220, this.player)];
+    }
+
     update() {
         if (this.mapIdx === 0 && this.player.x > n * unitLength - 10) {
             this.mapIdx = 1;
@@ -17,11 +25,7 @@ class GameManager {
         }
 
         if (this.player.isDead(this.tilemaps[this.mapIdx].cells)) {
-            this.player.x = 120;
-            this.player.y = 100;
-            this.player.vx = 0;
-            this.player.vy = 0;
-            this.enemies = [new Ghost(800, 220, this.player)];
+            this.reset();
         } else {
             this.player.update(this.tilemaps[this.mapIdx].cells);
         }
@@ -31,11 +35,7 @@ class GameManager {
         // }
         this.enemies.forEach((ghost) => {
             if (ghost.collide(this.player)) {
-                this.player.x = 120;
-                this.player.y = 100;
-                this.player.vx = 0;
-                this.player.vy = 0;
-                this.enemies = [new Ghost(800, 220, this.player)];
+                this.reset();
             }
             ghost.update();
         });

@@ -49,6 +49,8 @@ function mousePressed() {
     gameManager.mousePressed();
 }
 
+let timer = 0;
+
 function draw() {
     if (started) {
         background(71, 45, 60);
@@ -60,6 +62,8 @@ function draw() {
             gameManager.update();
             gameManager.draw();
         }
+        text(Math.floor(timer/60), 220, 180);
+        timer += 1;
     } else {
         background(24, 24, 24);
         textSize(32);
