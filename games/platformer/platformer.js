@@ -54,9 +54,6 @@ function mousePressed() {
     if (startMenu.buttons[0].isHovering() && state === "menu") {
         state = "game";
     }
-    if (startMenu.buttons[1].isHovering()) {
-        state = "options";
-    }
     gameManager.mousePressed();
 }
 

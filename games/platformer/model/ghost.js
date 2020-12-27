@@ -39,17 +39,17 @@ class Ghost extends GameObject {
         }
         this.width += 0.4*Math.cos(this.theta)
         this.theta += 0.1;
-        this.x = this.x + this.vx + 0.4*Math.cos(this.theta);
-        this.y = this.y + this.vy + 0.4*Math.sin(this.theta);
+        this.x = this.x + this.vx - 0.4*Math.sin(this.theta);
+        this.y = this.y + this.vy + 0.4*Math.cos(this.theta);
     }
 
     draw(shift_x, shift_y) {
         push();
         if (this.vx > 0) {
-            image(spriteSheet, this.x - shift_x, this.y - shift_y, this.width, this.height, 26*16 + 1, 6*16 + 3, 14, 13);
-        } else {
             scale(-1, 1);
             image(spriteSheet, (774 - unitLength) - (this.x - shift_x + spriteSheet.width), this.y - shift_y, this.width, this.height, 26*16 + 1, 6*16 + 3, 14, 13);
+        } else {
+            image(spriteSheet, this.x - shift_x, this.y - shift_y, this.width, this.height, 26*16 + 1, 6*16 + 3, 14, 13);
         }
         pop();
     }
