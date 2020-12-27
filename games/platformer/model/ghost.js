@@ -38,8 +38,8 @@ class Ghost extends GameObject {
             }
         }
         this.theta += 0.1;
-        this.x = this.x + this.vx + Math.cos(this.theta);
-        this.y = this.y + this.vy + Math.sin(this.theta);
+        this.x = this.x + this.vx + 0.4*Math.cos(this.theta);
+        this.y = this.y + this.vy + 0.4*Math.sin(this.theta);
     }
 
     draw(shift_x, shift_y) {

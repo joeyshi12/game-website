@@ -62,7 +62,7 @@ function draw() {
             gameManager.update();
             gameManager.draw();
         }
-        text(Math.floor(timer/60), 220, 180);
+        text("Timer:" + Math.floor(10*timer/6)/100, 450, 50);
         timer += 1;
     } else {
         background(24, 24, 24);
