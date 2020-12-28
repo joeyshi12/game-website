@@ -1,7 +1,7 @@
 class Ghost extends GameObject {
     ACCELERATION = 2.5;
     MAX_SPEED = 2.5;
-    RANGE = 300;
+    RANGE = 400;
     theta = 0;
     update_timer = 28;
     trigger = false;
