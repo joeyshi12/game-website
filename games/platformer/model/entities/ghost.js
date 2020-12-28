@@ -17,7 +17,7 @@ class Ghost extends GameObject {
         let dx = this.target.x - this.x;
         let dy = this.target.y - this.y;
         const r = Math.sqrt(dx**2 + dy**2);
-        if (r > this.RANGE) {
+        if (r < this.RANGE) {
             this.trigger = true;
         }
         if (!this.trigger) {

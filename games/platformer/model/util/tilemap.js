@@ -1,3 +1,5 @@
+const unitLength = 32;
+
 class Tilemap {
     constructor(cells, m, n) {
         this.cells = cells;
