@@ -186,7 +186,9 @@ class GameState extends State {
         this.player.y = 100;
         this.player.vx = 0;
         this.player.vy = 0;
-        this.enemies = [new Ghost(800, 220, this.player), new Ghost(300, 220, this.player)];
+        if (this.mapIdx === 0) {
+            this.enemies = [new Ghost(800, 220, this.player), new Ghost(300, 220, this.player)];
+        }
     }
 
     update() {
