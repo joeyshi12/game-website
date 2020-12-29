@@ -119,7 +119,7 @@ class OptionsMenu extends State {
 
     keyPressListener(manager) {
         if (this.awaitingFor) {
-            manager.setKeyBinding(this.awaitingFor, keyCode);
+            manager.setKeyBinding(this.awaitingFor, key.toUpperCase());
         }
         this.awaitingFor = null;
     }
@@ -140,25 +140,25 @@ class OptionsMenu extends State {
         if (this.awaitingFor === "left") {
             fill(255,255,0);
         }
-        text(String.fromCharCode(manager.getKeyBinding("left")), 360, 187);
+        text(manager.getKeyBinding("left"), 360, 187);
         pop();
         push();
         if (this.awaitingFor === "right") {
             fill(255,255,0);
         }
-        text(String.fromCharCode(manager.getKeyBinding("right")), 360, 227);
+        text(manager.getKeyBinding("right"), 360, 227);
         pop();
         push();
         if (this.awaitingFor === "jump") {
             fill(255,255,0);
         }
-        text(String.fromCharCode(manager.getKeyBinding("jump")), 360, 267);
+        text(manager.getKeyBinding("jump"), 360, 267);
         pop();
         push();
         if (this.awaitingFor === "drop") {
             fill(255,255,0);
         }
-        text(String.fromCharCode(manager.getKeyBinding("drop")), 360, 307);
+        text(manager.getKeyBinding("drop"), 360, 307);
         pop();
         for (let button of Object.values(this.buttons)) {
             button.draw();
@@ -176,7 +176,7 @@ class GameState extends State {
         this.player = new Player(120, 100);
         this.enemies = [new Ghost(800, 220, this.player), new Ghost(300, 220, this.player)];
         this.startTime = Date.now();
-        this.endTime = Date.now();
+        this.deltaTime = 0;
         this.paused = false;
         this.gemAngle = 0;
     }
@@ -209,6 +209,7 @@ class GameState extends State {
         }
 
         if (!this.finished) {
+            this.deltaTime = Date.now() - this.startTime;
             this.enemies.forEach((ghost) => {
                 if (ghost.collide(this.player)) {
                     this.reset();
@@ -219,12 +220,8 @@ class GameState extends State {
 
         const player_x_center = Math.floor((this.player.x+this.player.width/2)/unitLength);
         const player_y_center = Math.floor((this.player.y+this.player.height/2)/unitLength);
-        if (player_x_center === 37 && player_y_center === 4) {
+        if (player_x_center === 37 && player_y_center === 4 && this.mapIdx === 1) {
             this.finished = true;
-        }
-
-        if (!this.finished) {
-            this.endTime = Date.now();
         }
 
         this.camera.update(this.player.x, this.player.y);
@@ -233,7 +230,7 @@ class GameState extends State {
     clickListener(manager) {}
 
     keyPressListener(manager) {
-        switch (keyCode) {
+        switch (key.toUpperCase()) {
             case manager.getKeyBinding("left"):
                 this.player.direction = -1;
                 this.player.facingRight = false;
@@ -257,11 +254,11 @@ class GameState extends State {
     }
 
     keyReleaseListener(manager) {
-        if (keyCode === manager.getKeyBinding("jump") && this.player.vy < 0) {
+        if (key.toUpperCase() === manager.getKeyBinding("jump") && this.player.vy < 0) {
             this.player.vy *= 0.3;
-        } else if (keyCode === manager.getKeyBinding("left") && this.player.direction < 0) {
+        } else if (key.toUpperCase() === manager.getKeyBinding("left") && this.player.direction < 0) {
             this.player.direction = 0;
-        } else if (keyCode === manager.getKeyBinding("right") && this.player.direction > 0) {
+        } else if (key.toUpperCase() === manager.getKeyBinding("right") && this.player.direction > 0) {
             this.player.direction = 0;
         }
     }
@@ -270,12 +267,12 @@ class GameState extends State {
         push();
         fill(255);
         textSize(22);
-        text("Timer: " + (this.endTime-this.startTime)/1000, 540, 40);
+        text("Timer: " + this.deltaTime/1000, 540, 40);
         pop();
     }
 
     drawWinAnimation() {
-        this.gemAngle += 0.08
+        this.gemAngle += 0.08;
         const x = 37*unitLength;
         const y = 4*unitLength;
         const x1 = x + unitLength*Math.cos(this.gemAngle);
@@ -294,6 +291,7 @@ class GameState extends State {
 
     draw(manager) {
         if (this.paused) {
+            this.startTime = Date.now() - this.deltaTime;
             push();
             stroke(1);
             textSize(32);

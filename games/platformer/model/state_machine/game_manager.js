@@ -1,7 +1,7 @@
 class GameManager {
     constructor() {
         this.state = new StartMenu();
-        this.keyBindings = {"left": 65, "right": 68, "jump": 87, "drop": 83};
+        this.keyBindings = {"left": "A", "right": "D", "jump": "W", "drop": "S"};
     }
 
     getKeyBinding(move) {
