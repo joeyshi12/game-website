@@ -1,10 +1,10 @@
 class Button {
-    constructor(text, x, y, height, width) {
+    constructor(text, x, y) {
         this.text = text;
         this.x = x;
         this.y = y;
-        this.width = width;
-        this.height = height;
+        this.width = 10*text.length;
+        this.height = 20;
     }
 
     isHovering() {
@@ -20,12 +20,12 @@ class Button {
         push();
         if (this.isHovering()) {
             textSize(22);
-            fill(255, 255, 255);
-            text(this.text, this.x+10, this.y + this.height * 0.7);
+            fill(255);
+            text(this.text, this.x - this.text.length/2, this.y + this.height);
         } else {
             textSize(20);
-            fill(255, 255, 255);
-            text(this.text, this.x+12, this.y + this.height * 0.7);
+            fill(255);
+            text(this.text, this.x, this.y + this.height);
         }
         pop();
     }
@@ -48,8 +48,8 @@ class State {
         throw new Error("Abstract method");
     }
 
-    createButton(text, x, y, width, height) {
-        this.buttons[text] = new Button(text, x, y, height, width);
+    createButton(text, x, y) {
+        this.buttons[text] = new Button(text, x, y);
     }
 
     draw(manager) {
@@ -60,8 +60,8 @@ class State {
 class StartMenu extends State {
     constructor() {
         super();
-        this.createButton("start",300,height/2-16,80,32);
-        this.createButton("options",290,height/2+16,100,32);
+        this.createButton("start", width / 2 - 25, height / 2 - 16);
+        this.createButton("options", width / 2 - 35, height / 2 + 16);
     }
 
     clickListener(manager) {
@@ -79,16 +79,13 @@ class StartMenu extends State {
     draw(manager) {
         push();
         background(24, 24, 24);
+        fill(255);
         textSize(32);
-        fill(255, 255, 255);
-        push();
-        textAlign(CENTER);
-        text("Platformer", 0, 180, width);
+        text("Platformer", width/2-80, 180);
         pop();
         for (let button of Object.values(this.buttons)) {
             button.draw();
         }
-        pop();
     }
 }
 
@@ -96,11 +93,11 @@ class OptionsMenu extends State {
     constructor() {
         super();
         this.awaitingFor = null;
-        this.createButton("left",width/2-80,height/2-60,70,32);
-        this.createButton("right",width/2-80,height/2-20,80,32);
-        this.createButton("jump",width/2-80,height/2+20,70,32);
-        this.createButton("drop",width/2-80,height/2+60,70,32);
-        this.createButton("back",width/2-80,height/2+100,70,32);
+        this.createButton("left", width / 2 - 105, height / 2 - 60);
+        this.createButton("right", width / 2 - 105, height / 2 - 20);
+        this.createButton("jump", width / 2 - 105, height / 2 + 20);
+        this.createButton("drop", width / 2 - 105, height / 2 + 60);
+        this.createButton("back", width / 2 - 105, height / 2 + 100);
     }
 
     clickListener(manager) {
@@ -140,25 +137,25 @@ class OptionsMenu extends State {
         if (this.awaitingFor === "left") {
             fill(255,255,0);
         }
-        text(manager.getKeyBinding("left"), 360, 187);
+        text(manager.getKeyBinding("left"), width/2, height/2-40);
         pop();
         push();
         if (this.awaitingFor === "right") {
             fill(255,255,0);
         }
-        text(manager.getKeyBinding("right"), 360, 227);
+        text(manager.getKeyBinding("right"), width/2, height/2);
         pop();
         push();
         if (this.awaitingFor === "jump") {
             fill(255,255,0);
         }
-        text(manager.getKeyBinding("jump"), 360, 267);
+        text(manager.getKeyBinding("jump"), width/2, height/2+40);
         pop();
         push();
         if (this.awaitingFor === "drop") {
             fill(255,255,0);
         }
-        text(manager.getKeyBinding("drop"), 360, 307);
+        text(manager.getKeyBinding("drop"), width/2, height/2+80);
         pop();
         for (let button of Object.values(this.buttons)) {
             button.draw();
@@ -170,42 +167,44 @@ class OptionsMenu extends State {
 class GameState extends State {
     constructor() {
         super();
-        this.camera = new Camera(width / 2, height / 2, n * unitLength);
+        this.camera = new Camera(width / 2, height / 2, unitLength, (n - 1) * unitLength, unitLength, (m - 1)*unitLength);
         this.tilemaps = [new Tilemap(cells1, m, n, this.camera), new Tilemap(cells2, m, n, this.camera)];
         this.mapIdx = 0;
-        this.player = new Player(100, 549, this.camera);
+        this.player = new Player(100, 485, this.camera);
         this.enemies = [new Ghost(800, 220, this.camera, this.player)];
         this.startTime = Date.now();
         this.deltaTime = 0;
         this.paused = false;
         this.gemAngle = 0;
-        this.createButton("reset", width/2-30, 100, 80, 32);
-        this.createButton("exit", width/2-25, 135, 70, 32);
+        this.createButton("reset", width / 2 - 25, 140);
+        this.createButton("exit", width / 2 - 20, 170);
     }
 
     reset() {
         this.mapIdx = 0;
-        this.player = new Player(100, 549, this.camera);
+        this.player = new Player(100, 485, this.camera);
         this.enemies = [new Ghost(800, 220, this.camera, this.player)];
         this.startTime = Date.now();
-        this.deltaTime = 0;
+        if (!this.finished) {
+            this.deltaTime = 0;
+        }
     }
 
     update() {
-        if (this.mapIdx === 0 && this.player.x > n * unitLength - 10) {
+        if (this.mapIdx === 0 && this.player.x > (n - 1) * unitLength - 10) {
             this.mapIdx = 1;
-            this.player.x = -10;
+            this.player.x = unitLength - 10;
             this.enemies = [];
-        } else if (this.mapIdx === 1 && this.player.x + this.player.width - 10 < 0) {
+        } else if (this.mapIdx === 1 && this.player.x + this.player.width - unitLength - 10 < 0) {
             this.mapIdx = 0;
-            this.player.x = n * unitLength - 10;
+            this.player.x = (n - 1) * unitLength - 10;
             this.enemies = [new Ghost(800, 220, this.camera, this.player)];
         }
 
-        if (this.player.isDead(this.tilemaps[this.mapIdx].cells)) {
+        if (this.player.isDead(this.tilemaps[this.mapIdx].data)) {
             this.reset();
         } else {
-            this.player.update(this.tilemaps[this.mapIdx].cells);
+            this.player.update(this.tilemaps[this.mapIdx].data);
         }
 
         if (!this.finished) {
@@ -233,6 +232,7 @@ class GameState extends State {
             if (this.buttons["reset"].isHovering()) {
                 this.reset();
                 this.paused = false;
+                this.finished = false;
             } else if (this.buttons["exit"].isHovering()) {
                 manager.setState(new StartMenu());
             }
@@ -256,7 +256,7 @@ class GameState extends State {
                 }
                 break;
             case manager.getKeyBinding("drop"):
-                this.player.dropDownPlatform(this.tilemaps[this.mapIdx].cells);
+                this.player.dropDownPlatform(this.tilemaps[this.mapIdx].data);
                 break;
             case "ESCAPE":
                 this.paused = !this.paused;
@@ -299,20 +299,26 @@ class GameState extends State {
         image(spriteSheet, x4-this.camera.x, y4+-this.camera.y, unitLength-8, unitLength-8, 33 * 16 + 1, 10 * 16 + 2, 14, 13);
     }
 
+    drawPauseMenu() {
+        push();
+        fill(255);
+        rect(width/2-75, 70, 150, 150);
+        fill(0);
+        rect(width/2-70, 75, 140, 140);
+        stroke(1);
+        textSize(32);
+        fill(255);
+        text("Paused", width/2-48, 120);
+        pop();
+        for (let button of Object.values(this.buttons)) {
+            button.draw();
+        }
+    }
+
     draw(manager) {
         if (this.paused) {
             this.startTime = Date.now() - this.deltaTime;
-            push();
-            fill(0);
-            rect(width/2-60, 20, 135, 160);
-            for (let button of Object.values(this.buttons)) {
-                button.draw();
-            }
-            stroke(1);
-            textSize(32);
-            fill(255);
-            text("Paused", width/2-40, 60);
-            pop();
+            this.drawPauseMenu();
         } else {
             this.update();
             push();
