@@ -199,7 +199,7 @@ class GameState extends State {
         } else if (this.mapIdx === 1 && this.player.x + this.player.width - 10 < 0) {
             this.mapIdx = 0;
             this.player.x = n * unitLength - 10;
-            this.enemies = [new Ghost(800, 220, this.camera)];
+            this.enemies = [new Ghost(800, 220, this.camera, this.player)];
         }
 
         if (this.player.isDead(this.tilemaps[this.mapIdx].cells)) {
@@ -317,10 +317,10 @@ class GameState extends State {
             this.update();
             push();
             background(71, 45, 60);
-            this.tilemaps[this.mapIdx].draw(this.camera);
-            this.player.draw(this.camera);
+            this.tilemaps[this.mapIdx].draw();
+            this.player.draw();
             this.enemies.forEach((ghost) => {
-                ghost.draw(this.camera);
+                ghost.draw();
             });
             this.drawTimer();
             if (this.finished && this.mapIdx === 1) {
