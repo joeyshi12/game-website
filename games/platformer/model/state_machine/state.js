@@ -210,13 +210,14 @@ class GameState extends State {
 
         if (!this.finished) {
             this.deltaTime = Date.now() - this.startTime;
-            this.enemies.forEach((ghost) => {
-                if (ghost.collide(this.player)) {
-                    this.reset();
-                }
-                ghost.update();
-            });
         }
+
+        this.enemies.forEach((ghost) => {
+            if (ghost.collide(this.player)) {
+                this.reset();
+            }
+            ghost.update();
+        });
 
         const player_x_center = Math.floor((this.player.x+this.player.width/2)/unitLength);
         const player_y_center = Math.floor((this.player.y+this.player.height/2)/unitLength);
