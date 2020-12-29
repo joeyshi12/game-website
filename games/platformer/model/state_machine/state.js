@@ -187,6 +187,8 @@ class GameState extends State {
         this.mapIdx = 0;
         this.player = new Player(100, 549, this.camera);
         this.enemies = [new Ghost(800, 220, this.camera, this.player)];
+        this.startTime = Date.now();
+        this.deltaTime = 0;
     }
 
     update() {
