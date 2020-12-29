@@ -24,7 +24,7 @@ function setup() {
 
 function keyPressed() {
     if (keyCode === 32) {
-        console.log("saving data");
+        console.log(data.toString());
     }
 }
 
@@ -40,9 +40,7 @@ function mouseDragged() {
         if (mouseX < columns*unitLength) {
             const i = Math.floor((mouseY-22*unitLength)/unitLength);
             const j = Math.floor(mouseX/unitLength);
-            console.log(i,j);
             data[i*columns + j] = selected[1]*48 + selected[0];
-            console.log(data[i*columns + j]);
         }
     }
 }
