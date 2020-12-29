@@ -171,24 +171,24 @@ class GameState extends State {
     constructor() {
         super();
         this.camera = new Camera(width / 2, height / 2, n * unitLength);
-        this.tilemaps = [new Tilemap(cells1, m, n), new Tilemap(cells2, m, n)];
+        this.tilemaps = [new Tilemap(cells1, m, n, this.camera), new Tilemap(cells2, m, n, this.camera)];
         this.mapIdx = 0;
-        this.player = new Player(120, 100);
-        this.enemies = [new Ghost(800, 220, this.player), new Ghost(300, 220, this.player)];
+        this.player = new Player(100, 549, this.camera);
+        this.enemies = [new Ghost(800, 220, this.camera, this.player)];
         this.startTime = Date.now();
         this.deltaTime = 0;
         this.paused = false;
         this.gemAngle = 0;
+        this.createButton("reset", width/2-30, 100, 80, 32);
+        this.createButton("exit", width/2-25, 135, 70, 32);
     }
 
     reset() {
-        this.player.x = 120;
-        this.player.y = 100;
-        this.player.vx = 0;
-        this.player.vy = 0;
-        if (this.mapIdx === 0) {
-            this.enemies = [new Ghost(800, 220, this.player), new Ghost(300, 220, this.player)];
-        }
+        this.mapIdx = 0;
+        this.player = new Player(100, 549, this.camera);
+        this.enemies = [new Ghost(800, 220, this.camera, this.player)];
+        this.startTime = Date.now();
+        this.deltaTime = 0;
     }
 
     update() {
@@ -199,7 +199,7 @@ class GameState extends State {
         } else if (this.mapIdx === 1 && this.player.x + this.player.width - 10 < 0) {
             this.mapIdx = 0;
             this.player.x = n * unitLength - 10;
-            this.enemies = [new Ghost(800, 220, this.player), new Ghost(300, 220, this.player)];
+            this.enemies = [new Ghost(800, 220, this.camera)];
         }
 
         if (this.player.isDead(this.tilemaps[this.mapIdx].cells)) {
@@ -228,7 +228,16 @@ class GameState extends State {
         this.camera.update(this.player.x, this.player.y);
     }
 
-    clickListener(manager) {}
+    clickListener(manager) {
+        if (this.paused) {
+            if (this.buttons["reset"].isHovering()) {
+                this.reset();
+                this.paused = false;
+            } else if (this.buttons["exit"].isHovering()) {
+                manager.setState(new StartMenu());
+            }
+        }
+    }
 
     keyPressListener(manager) {
         switch (key.toUpperCase()) {
@@ -249,7 +258,7 @@ class GameState extends State {
             case manager.getKeyBinding("drop"):
                 this.player.dropDownPlatform(this.tilemaps[this.mapIdx].cells);
                 break;
-            case 27:
+            case "ESCAPE":
                 this.paused = !this.paused;
         }
     }
@@ -294,21 +303,24 @@ class GameState extends State {
         if (this.paused) {
             this.startTime = Date.now() - this.deltaTime;
             push();
+            fill(0);
+            rect(width/2-60, 20, 135, 160);
+            for (let button of Object.values(this.buttons)) {
+                button.draw();
+            }
             stroke(1);
             textSize(32);
             fill(255);
-            text("Paused", width/2-40, height/2-20);
+            text("Paused", width/2-40, 60);
             pop();
         } else {
             this.update();
-            const shift_x = this.camera.x;
-            const shift_y = this.camera.y;
             push();
             background(71, 45, 60);
-            this.tilemaps[this.mapIdx].draw(shift_x, shift_y);
-            this.player.draw(shift_x, shift_y);
+            this.tilemaps[this.mapIdx].draw(this.camera);
+            this.player.draw(this.camera);
             this.enemies.forEach((ghost) => {
-                ghost.draw(shift_x, shift_y);
+                ghost.draw(this.camera);
             });
             this.drawTimer();
             if (this.finished && this.mapIdx === 1) {

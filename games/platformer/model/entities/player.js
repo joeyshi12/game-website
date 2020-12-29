@@ -1,12 +1,12 @@
-class Player extends GameObject {
+class Player extends Entity {
     ACCELERATION = 0.8;
     GRAVITY = 0.4;
     MAX_SPEED = 4;
     ANIMATION_BUFFER = 6;
     JUMP_VELOCITY = -10;
 
-    constructor(x, y) {
-        super(x, y, unitLength - 6, unitLength - 6);
+    constructor(x, y, camera) {
+        super(x, y, unitLength - 6, unitLength - 6, camera);
         this.vx = 0;
         this.vy = 0;
         this.direction = 0;
@@ -112,13 +112,13 @@ class Player extends GameObject {
         }
     }
 
-    draw(shift_x, shift_y) {
+    draw() {
         push();
         if (this.facingRight) {
-            image(spriteSheet, this.x - shift_x, this.y - shift_y, this.width, this.height, (18 + this.animIdx) * 16 + 1, 7 * 16 + 3, 14, 13);
+            image(spriteSheet, this.x - this.camera.x, this.y - this.camera.y, this.width, this.height, (18 + this.animIdx) * 16 + 1, 7 * 16 + 3, 14, 13);
         } else {
             scale(-1, 1);
-            image(spriteSheet, (774 - unitLength) - (this.x - shift_x + spriteSheet.width), this.y - shift_y, this.width, this.height, (18 + this.animIdx) * 16 + 1, 7 * 16 + 3, 14, 13);
+            image(spriteSheet, (774 - unitLength) - (this.x - this.camera.x + spriteSheet.width), this.y - this.camera.y, this.width, this.height, (18 + this.animIdx) * 16 + 1, 7 * 16 + 3, 14, 13);
         }
         pop();
     }

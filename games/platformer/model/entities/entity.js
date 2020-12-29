@@ -1,16 +1,25 @@
-class GameObject {
-    constructor(x, y, width, height) {
+class Entity {
+    constructor(x, y, width, height, camera) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
+        this.camera = camera;
     }
 
-    collide(gameObject) {
-        if (this.x + this.width < gameObject.x || this.x > gameObject.x + gameObject.width) {
+    collide(entity) {
+        if (this.x + this.width < entity.x || this.x > entity.x + entity.width) {
             return false;
         }
-        return !(this.y + this.height < gameObject.y || this.y > gameObject.y + gameObject.height);
+        return !(this.y + this.height < entity.y || this.y > entity.y + entity.height);
+    }
+
+    update() {
+        throw new Error("Abstract method");
+    }
+
+    draw() {
+        throw new Error("Abstract method");
     }
 
     checkRightWall(map) {

@@ -1,20 +1,20 @@
 const unitLength = 32;
 
 class Tilemap {
-    constructor(cells, m, n) {
+    constructor(cells, m, n, camera) {
         this.cells = cells;
         this.m = m;
         this.n = n;
-        this.spriteSheet = null;
+        this.camera = camera;
     }
 
-    draw(shift_x, shift_y) {
+    draw() {
         for (let i = 0; i < this.m * this.n; i++) {
             const x = (i % this.n) * unitLength;
             const y = Math.floor(i / this.n) * unitLength;
             const sx = (this.cells[i] % 48) * 16;
             const sy = Math.floor(this.cells[i] / 48) * 16;
-            image(spriteSheet, x - shift_x, y - shift_y, unitLength, unitLength, sx, sy, 15.5, 16);
+            image(spriteSheet, x - this.camera.x, y - this.camera.y, unitLength, unitLength, sx, sy, 15.5, 16);
         }
     }
 }
@@ -88,8 +88,8 @@ const cells2 = [
     0 , 0 , 0 , 0 , 0 , 66, 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 67, 0 , 0 , 0 , 0 , 0 , 68, 0 , 0 , 0 , 0 , I , 0 , 0 , 0 , 0 , f2, 0 , 66,
     0 , 0 , 0 , 0 , 0 , 66, 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , mc, mc, mc, mc, mc, mc, mc, mc, mc, mc, mc, mc, rc, 0 , 0 , 0 , 0 , I , 0 , 18, 19, 19, 19, 19, d ,
     0 , f1, 0 , 0 , 0 , 66, 0 , 67, 0 , 0 , 0 , 0 , 0 , 0 , 68, 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , I , 0 , 66, 0 , 0 , 0 , 0 , 0 ,
-    19, 20, a , b , c , 66, 0 , 0 , 0 , 0 , 0 , 0 , 67, 0 , 68, 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , I , 0 , 66, 0 , 0 , 67, 0 , 0 ,
-    0 , 68, 0 , 0 , 0 , lc, mc, mc, mc, mc, mc, mc, mc, mc, rc, 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 18, 19, 19, 19, 19, 19, 19, 19, d , 0 , 0 , 0 , 0 , 0 ,
+    19, 20, a , b , c , lc, mc ,mc, mc, mc, mc, mc, mc, mc, rc, 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , I , 0 , 66, 0 , 0 , 67, 0 , 0 ,
+    0 , 68, 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 18, 19, 19, 19, 19, 19, 19, 19, d , 0 , 0 , 0 , 0 , 0 ,
     0 , 68, 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , a , b , c , 0 , 0 , 0 , 66, 0 , 0 , 0 , 0 , 0 , 0 , 0 , 67, 0 , 0 , 0 , 0 , 0 ,
     67, 68, 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 66, 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,
     0 , 68, 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , a , b , c , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 66, 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 ,
