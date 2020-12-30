@@ -26,8 +26,20 @@ function keyPressed() {
     if (keyCode === 13) {
         const inputText = document.getElementById("import");
         let dataStr = inputText.value;
+        if (dataStr[0] !== "[" || dataStr[dataStr.length-1] !== "]") {
+            return;
+        }
         dataStr = dataStr.slice(1, dataStr.length-1);
-        data = dataStr.split(",").map((i) => +i);
+        let newData = dataStr.split(",");
+        try {
+            newData = newData.map((i) => +i);
+        } catch (e) {
+            return;
+        }
+        if (newData.length !== rows*columns) {
+            return;
+        }
+        data = newData;
     } else if (keyCode === 32) {
         const inputText = document.getElementById("export");
         inputText.value = "[" + data.toString() + "]";
