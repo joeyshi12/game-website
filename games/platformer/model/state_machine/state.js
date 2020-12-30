@@ -220,13 +220,15 @@ class GameState extends State {
         this.handleMapTransition();
         let i = Math.floor((this.player.y + this.player.height/2) / unitLength);
         let j = Math.floor((this.player.x + this.player.width/2) / unitLength);
-        if (this.map.getTile(i, j) === 22) {
+        if (this.map.getTile(i, j) === 22 && !this.player.isDead) {
             this.player.setDead();
+            setTimeout(() => {this.reset()}, 2000);
         }
         this.player.update(this.map);
         this.enemies.forEach((ghost) => {
-            if (ghost.collide(this.player)) {
+            if (ghost.collide(this.player) && !this.player.isDead) {
                 this.player.setDead();
+                setTimeout(() => {this.reset()}, 2000);
             }
             ghost.update();
         });
