@@ -26,23 +26,21 @@ function keyPressed() {
     if (keyCode === 13) {
         const inputText = document.getElementById("import");
         let dataStr = inputText.value;
-        if (dataStr[0] !== "[" || dataStr[dataStr.length-1] !== "]") {
-            return;
-        }
-        dataStr = dataStr.slice(1, dataStr.length-1);
         let newData = dataStr.split(",");
         try {
             newData = newData.map((i) => +i);
         } catch (e) {
+            console.log("sdsadsad")
             return;
         }
         if (newData.length !== rows*columns) {
+            console.log("sdsadsad")
             return;
         }
         data = newData;
     } else if (keyCode === 32) {
         const inputText = document.getElementById("export");
-        inputText.value = "[" + data.toString() + "]";
+        inputText.value = data.toString();
         inputText.select();
         inputText.setSelectionRange(0, 99999);
         document.execCommand("copy");
