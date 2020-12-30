@@ -23,8 +23,13 @@ function setup() {
 }
 
 function keyPressed() {
-    if (keyCode === 32) {
-        const inputText = document.getElementById("myInput");
+    if (keyCode === 13) {
+        const inputText = document.getElementById("import");
+        let dataStr = inputText.value;
+        dataStr = dataStr.slice(1, dataStr.length-1);
+        data = dataStr.split(",").map((i) => +i);
+    } else if (keyCode === 32) {
+        const inputText = document.getElementById("export");
         inputText.value = "[" + data.toString() + "]";
         inputText.select();
         inputText.setSelectionRange(0, 99999);
