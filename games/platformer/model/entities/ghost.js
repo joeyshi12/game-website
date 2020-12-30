@@ -7,7 +7,7 @@ class Ghost extends Entity {
     trigger = false;
 
     constructor(x, y, target) {
-        super(x, y, unitLength - 6, unitLength - 6);
+        super(x, y, unitLength, unitLength);
         this.target = target;
         this.vx = 0;
         this.vy = 0;

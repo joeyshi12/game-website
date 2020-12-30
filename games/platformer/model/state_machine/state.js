@@ -184,6 +184,7 @@ class GameState extends State {
         this.gemAngle = 0;
         this.createButton("reset", width / 2 - 25, 140);
         this.createButton("exit", width / 2 - 20, 170);
+        this.deadTimer = 120;
     }
 
     reset() {
@@ -220,15 +221,20 @@ class GameState extends State {
         this.handleMapTransition();
         let i = Math.floor((this.player.y + this.player.height/2) / unitLength);
         let j = Math.floor((this.player.x + this.player.width/2) / unitLength);
-        if (this.map.getTile(i, j) === 22 && !this.player.isDead) {
+        if (this.player.isDead) {
+            this.deadTimer -= 1;
+        }
+        if (this.deadTimer === 0) {
+            this.reset();
+            this.deadTimer = 120;
+        }
+        if (this.map.getTile(i, j) === 22) {
             this.player.setDead();
-            setTimeout(() => {this.reset()}, 2000);
         }
         this.player.update(this.map);
         this.enemies.forEach((ghost) => {
-            if (ghost.collide(this.player) && !this.player.isDead) {
+            if (ghost.collide(this.player)) {
                 this.player.setDead();
-                setTimeout(() => {this.reset()}, 2000);
             }
             ghost.update();
         });
