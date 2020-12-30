@@ -1,3 +1,7 @@
+const unitLength = 32;
+const width = 700;
+const height = 450;
+
 class Camera {
     constructor(center_x, center_y, leftBound, rightBound, topBound, bottomBound) {
         this.center_x = center_x;

@@ -6,8 +6,8 @@ class Ghost extends Entity {
     update_timer = 28;
     trigger = false;
 
-    constructor(x, y, camera, target) {
-        super(x, y, unitLength - 6, unitLength - 6, camera);
+    constructor(x, y, target) {
+        super(x, y, unitLength - 6, unitLength - 6);
         this.target = target;
         this.vx = 0;
         this.vy = 0;
@@ -47,9 +47,9 @@ class Ghost extends Entity {
         push();
         if (this.vx > 0) {
             scale(-1, 1);
-            image(spriteSheet, (774 - unitLength) - (this.x - this.camera.x + spriteSheet.width), this.y - this.camera.y, this.width, this.height, 26*16 + 1, 6*16 + 3, 14, 13);
+            image(spriteSheet, (774 - unitLength) - (this.x - camera.x + spriteSheet.width), this.y - camera.y, this.width, this.height, 26*16 + 1, 6*16 + 3, 14, 13);
         } else {
-            image(spriteSheet, this.x - this.camera.x, this.y - this.camera.y, this.width, this.height, 26*16 + 1, 6*16 + 3, 14, 13);
+            image(spriteSheet, this.x - camera.x, this.y - camera.y, this.width, this.height, 26*16 + 1, 6*16 + 3, 14, 13);
         }
         pop();
     }

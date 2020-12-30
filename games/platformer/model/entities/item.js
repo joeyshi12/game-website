@@ -4,4 +4,6 @@ class Item extends Entity {
     }
 
     update() {}
+
+    draw() {}
 }

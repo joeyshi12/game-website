@@ -5,38 +5,56 @@ class Player extends Entity {
     ANIMATION_BUFFER = 6;
     JUMP_VELOCITY = -10;
 
-    constructor(x, y, camera) {
-        super(x, y, unitLength - 6, unitLength - 6, camera);
+    constructor(x, y) {
+        super(x, y, unitLength - 6, unitLength - 6);
         this.vx = 0;
         this.vy = 0;
         this.direction = 0;
         this.animIdx = 0;
         this.animTimer = this.ANIMATION_BUFFER;
-        this.grounded = false;
-        this.facingRight = true;
+        this.isGrounded = false;
+        this.isFacingRight = true;
         this.isLanding = false;
+        this.isDead = false;
+    }
+
+    moveLeft() {
+        if (!this.isDead) {
+            this.direction = -1;
+            this.isFacingRight = false;
+        }
+    }
+
+    moveRight() {
+        if (!this.isDead) {
+            this.direction = 1;
+            this.isFacingRight = true;
+        }
     }
 
     jump() {
-        this.y -= 1;
-        this.vy = this.JUMP_VELOCITY;
-        this.grounded = false;
+        if (!this.isDead && this.isGrounded) {
+            this.y -= 1;
+            this.vy = this.JUMP_VELOCITY;
+            this.isGrounded = false;
+            jumpSound.play();
+        }
     }
 
     dropDownPlatform(map) {
-        let i = Math.floor((this.y + this.height) / unitLength) + 1;
-        for (let j = Math.floor((this.x) / unitLength); j <= Math.floor((this.x + this.width) / unitLength); j++) {
-            if (!platforms.has(map[i * n + j])) {
-                return;
+        if (!this.isDead && this.isGrounded) {
+            let i = Math.floor((this.y + this.height) / unitLength) + 1;
+            for (let j = Math.floor((this.x) / unitLength); j <= Math.floor((this.x + this.width) / unitLength); j++) {
+                if (!platforms.has(map.getTile(i, j))) {
+                    return;
+                }
             }
+            this.y += 1;
         }
-        this.y += 1;
     }
 
-    isDead(map) {
-        let i = Math.floor((this.y + this.height / 2) / unitLength);
-        let j = Math.floor((this.x + this.width / 2) / unitLength);
-        return map[i * n + j] === 22;
+    setDead() {
+        this.isDead = true;
     }
 
     update(map) {
@@ -48,8 +66,8 @@ class Player extends Entity {
     updateVerticalMovement(map) {
         const ceiling = this.checkCeiling(map);
         const ground = this.checkGround(map);
-        this.grounded = ground !== -1 && this.y + this.vy >= ground - this.height - 1;
-        if (this.grounded) {
+        this.isGrounded = ground !== -1 && this.y + this.vy >= ground - this.height - 1;
+        if (this.isGrounded) {
             this.vy = 0;
             this.y = ground - this.height - 1;
             if (this.isLanding) {
@@ -78,7 +96,7 @@ class Player extends Entity {
             this.x = leftWall + unitLength + 1;
             this.vx = 0;
         } else {
-            if (this.direction === 0) {
+            if (this.direction === 0 || this.isDead) {
                 if (this.vx > 0) {
                     this.vx = Math.max(0, this.vx - this.ACCELERATION);
                 } else if (this.vx < 0) {
@@ -96,29 +114,33 @@ class Player extends Entity {
     }
 
     updateAnimation() {
-        if (this.grounded) {
-            if (this.animTimer > 0) {
-                this.animTimer--;
-            } else {
-                this.animTimer = this.ANIMATION_BUFFER;
-                if (this.vx === 0) {
-                    this.animIdx = 0;
-                } else {
-                    this.animIdx = (this.animIdx + 1) % 4;
-                }
-            }
+        if (this.isDead) {
+            this.animIdx = 5;
         } else {
-            this.animIdx = 4;
+            if (this.isGrounded) {
+                if (this.animTimer > 0) {
+                    this.animTimer--;
+                } else {
+                    this.animTimer = this.ANIMATION_BUFFER;
+                    if (this.vx === 0) {
+                        this.animIdx = 0;
+                    } else {
+                        this.animIdx = (this.animIdx + 1) % 4;
+                    }
+                }
+            } else {
+                this.animIdx = 4;
+            }
         }
     }
 
     draw() {
         push();
-        if (this.facingRight) {
-            image(spriteSheet, this.x - this.camera.x, this.y - this.camera.y, this.width, this.height, (18 + this.animIdx) * 16 + 1, 7 * 16 + 3, 14, 13);
+        if (this.isFacingRight) {
+            image(spriteSheet, this.x - camera.x, this.y - camera.y, this.width, this.height, (18 + this.animIdx) * 16 + 1, 7 * 16 + 3, 14, 13);
         } else {
             scale(-1, 1);
-            image(spriteSheet, (774 - unitLength) - (this.x - this.camera.x + spriteSheet.width), this.y - this.camera.y, this.width, this.height, (18 + this.animIdx) * 16 + 1, 7 * 16 + 3, 14, 13);
+            image(spriteSheet, (774 - unitLength) - (this.x - camera.x + spriteSheet.width), this.y - camera.y, this.width, this.height, (18 + this.animIdx) * 16 + 1, 7 * 16 + 3, 14, 13);
         }
         pop();
     }
