@@ -5,7 +5,7 @@ const width = 48*unitLength;
 const height = (22 + rows)*unitLength;
 let spriteSheet;
 const selected = [0, 0];
-const data = [];
+let data = [];
 
 
 function preload() {
@@ -24,7 +24,12 @@ function setup() {
 
 function keyPressed() {
     if (keyCode === 32) {
-        console.log(data.toString());
+        const inputText = document.getElementById("myInput");
+        inputText.value = "[" + data.toString() + "]";
+        inputText.select();
+        inputText.setSelectionRange(0, 99999);
+        document.execCommand("copy");
+        alert("Map data copied to clipboard");
     }
 }
 
