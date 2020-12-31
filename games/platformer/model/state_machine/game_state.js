@@ -128,6 +128,9 @@ class GameState extends State {
                 this.player.dropDownPlatform(this.map);
                 break;
             case "ESCAPE":
+                if (!this.paused) {
+                    pauseSound.play();
+                }
                 this.paused = !this.paused;
         }
     }
