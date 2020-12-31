@@ -1,26 +1,22 @@
 class GameState extends State {
     constructor() {
         super();
-        this.map = map1;
-        this.player = new Player(100, 15 * unitLength + 9);
+        this.reset();
+        this.createButton("reset", width / 2 - 25, 140);
+        this.createButton("exit", width / 2 - 20, 170);
+    }
+
+    reset() {
+        this.map = maps[1];
+        this.adjustCameraToMap();
+        this.player = new Player(60, 15 * unitLength + 9);
         this.spawnEnemies();
         this.projectiles = [];
         this.startTime = Date.now();
         this.deltaTime = 0;
-        this.paused = false;
-        this.gemAngle = 0;
-        this.createButton("reset", width / 2 - 25, 140);
-        this.createButton("exit", width / 2 - 20, 170);
-        this.deadTimer = 120;
-    }
-
-    reset() {
-        this.map = map1;
-        this.player = new Player(100, 15 * unitLength + 9);
-        this.spawnEnemies();
-        this.startTime = Date.now();
-        this.deltaTime = 0;
         this.finished = false;
+        this.gemAngle = 0;
+        this.deadTimer = 120;
     }
 
     fillEnemies(positions) {
@@ -31,25 +27,24 @@ class GameState extends State {
 
     spawnEnemies() {
         this.enemies = [];
-        switch (this.map) {
-            case map0:
-                this.fillEnemies(enemyPositions0);
-                break;
-            case map1:
-                this.fillEnemies(enemyPositions1);
-                break;
-            case map2:
-                this.fillEnemies(enemyPositions2);
-        }
+        const i = maps.indexOf(this.map);
+        this.fillEnemies(enemyPositions[i]);
+    }
+
+    adjustCameraToMap() {
+        camera.rightBound = this.map.numCols * unitLength;
+        camera.bottomBound = this.map.numRows * unitLength;
     }
 
     handleMapTransition() {
         if (this.map.rightMap && this.player.x > this.map.numCols * unitLength - 10) {
             this.map = this.map.rightMap;
+            this.adjustCameraToMap();
             this.player.x = -10;
             this.spawnEnemies();
         } else if (this.map.leftMap && this.player.x + this.player.width - 10 < 0) {
             this.map = this.map.leftMap;
+            this.adjustCameraToMap();
             this.player.x = this.map.numCols * unitLength - 10;
             this.spawnEnemies();
         }
@@ -69,8 +64,10 @@ class GameState extends State {
         if (!this.finished) {
             this.deltaTime = Date.now() - this.startTime;
         }
-        if (i === 4 && j === 37 && this.map === map2) {
+        if (this.map.getTile(i, j) === 449 && this.map === maps[3]) {
             this.finished = true;
+            this.flagRow = i;
+            this.flagCol = j;
         }
     }
 
@@ -166,8 +163,8 @@ class GameState extends State {
 
     drawWinAnimation() {
         this.gemAngle += 0.08;
-        const x = 37*unitLength;
-        const y = 4*unitLength;
+        const x = this.flagCol * unitLength;
+        const y = this.flagRow * unitLength;
         const x1 = x + unitLength*Math.cos(this.gemAngle);
         const y1 = y + unitLength*Math.sin(this.gemAngle);
         image(spriteSheet, x1-camera.x, y1-camera.y, unitLength-8, unitLength-8, 33 * 16 + 1, 10 * 16 + 2, 14, 13);
@@ -215,7 +212,7 @@ class GameState extends State {
                 projectile.draw();
             });
             this.drawTimer();
-            if (this.finished && this.map === map2) {
+            if (this.finished && this.map === maps[3]) {
                 this.drawWinAnimation();
             }
             pop();

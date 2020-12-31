@@ -1,5 +1,5 @@
-const numRows = 20;
-const numCols = 40;
+const numRows = 30;
+const numCols = 30;
 const unitLength = 24;
 const width = 48*unitLength;
 const height = (22 + numRows)*unitLength;
@@ -47,6 +47,7 @@ function keyPressed() {
 }
 
 function mousePressed() {
+    console.log(mouseX, mouseY);
     if (mouseY < 22*unitLength) {
         selected[0] = Math.floor(mouseX/unitLength);
         selected[1] = Math.floor(mouseY/unitLength);

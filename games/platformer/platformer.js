@@ -1,6 +1,6 @@
 let canvas;
 let inconsolata, spriteSheet, jumpSound, landSound;
-let camera, map0, map1, map2;
+let camera, maps;
 let gameManager;
 
 function preload() {
@@ -18,11 +18,10 @@ function setup() {
     canvas.center('horizontal');
     textFont(inconsolata);
     camera = new Camera(width / 2, height / 2, 0, 40 * unitLength, 0, 20 * unitLength);
-    map0 = new Map(data0, 20, 40);
-    map1 = new Map(data1, 20, 40);
-    map2 = new Map(data2, 20, 40);
-    map0.setRightMap(map1);
-    map1.setRightMap(map2);
+    maps = [new Map(data0, 20, 40), new Map(data1, 20, 40), new Map(data2, 20, 40), new Map(data3, 30, 30)];
+    maps[0].setRightMap(maps[1]);
+    maps[1].setRightMap(maps[2]);
+    maps[2].setRightMap(maps[3]);
     gameManager = new GameManager();
 }
 
