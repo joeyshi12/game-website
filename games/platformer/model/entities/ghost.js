@@ -8,7 +8,7 @@ class Ghost extends Entity {
         this.target = target;
         this.vx = 0;
         this.vy = 0;
-        this.angle = 0
+        this.angle = Math.random() * 2 * Math.PI;
         this.update_timer = 20;
         this.triggered = false;
         this.sprite = spriteSheet.get(26 * 16 + 1, 6 * 16, 14, 16);
@@ -27,8 +27,8 @@ class Ghost extends Entity {
             if (this.update_timer > 0) {
                 this.update_timer--;
             } else {
-                this.vx = this.SPEED * tx;
-                this.vy = this.SPEED * ty;
+                this.vx = this.SPEED * tx + Math.random() - 0.5;
+                this.vy = this.SPEED * ty + Math.random() - 0.5;
                 this.update_timer = this.UPDATE_BUFFER;
             }
         }
