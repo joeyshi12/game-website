@@ -126,6 +126,16 @@ class OptionsMenu extends State {
 
     keyReleaseListener(manager) {}
 
+    drawMoveRow(move, key, row) {
+        this.buttons[move].draw();
+        push();
+        if (this.awaitingFor === move) {
+            fill(255, 255, 0);
+        }
+        text(key, width/2 + 30, height/2 - 80 + 40 * row);
+        pop();
+    }
+
     draw(manager) {
         push();
         background(24, 24, 24);
@@ -135,40 +145,12 @@ class OptionsMenu extends State {
         textSize(32);
         text("Controls", width/2 - 64, 100);
         pop();
-        push();
-        if (this.awaitingFor === "left") {
-            fill(255,255,0);
-        }
-        text(manager.getKeyBinding("left"), width/2 + 30, height/2-80);
-        pop();
-        push();
-        if (this.awaitingFor === "right") {
-            fill(255,255,0);
-        }
-        text(manager.getKeyBinding("right"), width/2 + 30, height/2-40);
-        pop();
-        push();
-        if (this.awaitingFor === "jump") {
-            fill(255,255,0);
-        }
-        text(manager.getKeyBinding("jump"), width/2 + 30, height/2);
-        pop();
-        push();
-        if (this.awaitingFor === "drop") {
-            fill(255,255,0);
-        }
-        text(manager.getKeyBinding("drop"), width/2 + 30, height/2+40);
-        pop();
-        push();
-        if (this.awaitingFor === "pause") {
-            fill(255,255,0);
-        }
-        text(manager.getKeyBinding("pause"), width/2 + 30, height/2+80);
-        pop();
-        for (let button of Object.values(this.buttons)) {
-            button.draw();
-        }
-        pop();
+        this.drawMoveRow("left", manager.getKeyBinding("left"), 0);
+        this.drawMoveRow("right", manager.getKeyBinding("right"), 1);
+        this.drawMoveRow("jump", manager.getKeyBinding("jump"), 2);
+        this.drawMoveRow("drop", manager.getKeyBinding("drop"), 3);
+        this.drawMoveRow("pause", manager.getKeyBinding("pause"), 4);
+        this.buttons["back"].draw();
     }
 }
 
@@ -176,8 +158,9 @@ class GameState extends State {
     constructor() {
         super();
         this.map = map1;
-        this.player = new Player(100, 485);
-        this.enemies = [new Ghost(800, 220, this.player)];
+        this.player = new Player(100, 15 * unitLength + 9);
+        this.spawnEnemies();
+        this.projectiles = [];
         this.startTime = Date.now();
         this.deltaTime = 0;
         this.paused = false;
@@ -189,11 +172,30 @@ class GameState extends State {
 
     reset() {
         this.map = map1;
-        this.player = new Player(100, 485);
-        this.enemies = [new Ghost(800, 220, this.player)];
+        this.player = new Player(100, 15 * unitLength + 9);
+        this.spawnEnemies();
         this.startTime = Date.now();
-        if (!this.finished) {
-            this.deltaTime = 0;
+        this.deltaTime = 0;
+        this.finished = false;
+    }
+
+    fillEnemies(positions) {
+        for (let position of positions) {
+            this.enemies.push(new Ghost(position[0], position[1], this.player));
+        }
+    }
+
+    spawnEnemies() {
+        this.enemies = [];
+        switch (this.map) {
+            case map0:
+                this.fillEnemies(enemyPositions0);
+                break;
+            case map1:
+                this.fillEnemies(enemyPositions1);
+                break;
+            case map2:
+                this.fillEnemies(enemyPositions2);
         }
     }
 
@@ -201,42 +203,24 @@ class GameState extends State {
         if (this.map.rightMap && this.player.x > this.map.numCols * unitLength - 10) {
             this.map = this.map.rightMap;
             this.player.x = -10;
-            if (this.map === map1) {
-                this.enemies = [new Ghost(800, 220, this.player)];
-            } else {
-                this.enemies = [];
-            }
+            this.spawnEnemies();
         } else if (this.map.leftMap && this.player.x + this.player.width - 10 < 0) {
             this.map = this.map.leftMap;
             this.player.x = this.map.numCols * unitLength - 10;
-            if (this.map === map1) {
-                this.enemies = [new Ghost(800, 220, this.player)];
-            } else {
-                this.enemies = [];
-            }
+            this.spawnEnemies();
         }
     }
 
-    update() {
-        this.handleMapTransition();
+    updateGameStatus() {
         let i = Math.floor((this.player.y + this.player.height/2) / unitLength);
         let j = Math.floor((this.player.x + this.player.width/2) / unitLength);
-        if (this.player.isDead) {
-            this.deadTimer -= 1;
-        }
-        if (this.deadTimer === 0) {
-            this.reset();
-            this.deadTimer = 120;
-        }
         if (this.map.getTile(i, j) === 22) {
-            this.player.setDead();
+            this.player.isDead = true;
         }
-        this.player.update(this.map);
         this.enemies.forEach((ghost) => {
             if (ghost.collide(this.player)) {
-                this.player.setDead();
+                this.player.isDead = true;
             }
-            ghost.update();
         });
         if (!this.finished) {
             this.deltaTime = Date.now() - this.startTime;
@@ -244,6 +228,25 @@ class GameState extends State {
         if (i === 4 && j === 37 && this.map === map2) {
             this.finished = true;
         }
+    }
+
+    update() {
+        this.handleMapTransition();
+        if (this.player.isDead) {
+            this.deadTimer--;
+        }
+        if (this.deadTimer <= 0) {
+            this.reset();
+            this.deadTimer = 120;
+        }
+        this.player.update(this.map);
+        this.enemies.forEach((ghost) => {
+            ghost.update();
+        });
+        this.projectiles.forEach((projectile) => {
+            projectile.update();
+        });
+        this.updateGameStatus();
         camera.update(this.player.x, this.player.y);
     }
 
@@ -256,6 +259,13 @@ class GameState extends State {
             } else if (this.buttons["exit"].isHovering()) {
                 manager.setState(new StartMenu());
             }
+        } else {
+            // const dx = mouseX - this.player.x + camera.x;
+            // const dy = mouseY - this.player.y + camera.y;
+            // const r = Math.sqrt(dx**2 + dy**2);
+            // const dir_x = dx / r;
+            // const dir_y = dy / r;
+            // this.projectiles.push(new FireBall(this.player.x, this.player.y, dir_x, dir_y));
         }
     }
 
@@ -279,12 +289,21 @@ class GameState extends State {
     }
 
     keyReleaseListener(manager) {
-        if (key.toUpperCase() === manager.getKeyBinding("jump") && this.player.vy < 0) {
-            this.player.vy *= 0.3;
-        } else if (key.toUpperCase() === manager.getKeyBinding("left") && this.player.direction < 0) {
-            this.player.direction = 0;
-        } else if (key.toUpperCase() === manager.getKeyBinding("right") && this.player.direction > 0) {
-            this.player.direction = 0;
+        switch (key.toUpperCase()) {
+            case manager.getKeyBinding("left"):
+                if (this.player.direction === -1) {
+                    this.player.direction = 0;
+                }
+                break;
+            case manager.getKeyBinding("right"):
+                if (this.player.direction === 1) {
+                    this.player.direction = 0;
+                }
+                break;
+            case manager.getKeyBinding("jump"):
+                if (this.player.vy < 0) {
+                    this.player.vy *= 0.3;
+                }
         }
     }
 
@@ -305,25 +324,25 @@ class GameState extends State {
         image(spriteSheet, x1-camera.x, y1-camera.y, unitLength-8, unitLength-8, 33 * 16 + 1, 10 * 16 + 2, 14, 13);
         const x2 = x - unitLength*Math.sin(this.gemAngle);
         const y2 = y + unitLength*Math.cos(this.gemAngle);
-        image(spriteSheet, x2-camera.x, y2+-camera.y, unitLength-8, unitLength-8, 33 * 16 + 1, 10 * 16 + 2, 14, 13);
+        image(spriteSheet, x2-camera.x, y2-camera.y, unitLength-8, unitLength-8, 33 * 16 + 1, 10 * 16 + 2, 14, 13);
         const x3 = x - unitLength*Math.cos(this.gemAngle);
         const y3 = y - unitLength*Math.sin(this.gemAngle);
-        image(spriteSheet, x3-camera.x, y3+-camera.y, unitLength-8, unitLength-8, 33 * 16 + 1, 10 * 16 + 2, 14, 13);
+        image(spriteSheet, x3-camera.x, y3-camera.y, unitLength-8, unitLength-8, 33 * 16 + 1, 10 * 16 + 2, 14, 13);
         const x4 = x + unitLength*Math.sin(this.gemAngle);
         const y4 = y - unitLength*Math.cos(this.gemAngle);
-        image(spriteSheet, x4-camera.x, y4+-camera.y, unitLength-8, unitLength-8, 33 * 16 + 1, 10 * 16 + 2, 14, 13);
+        image(spriteSheet, x4-camera.x, y4-camera.y, unitLength-8, unitLength-8, 33 * 16 + 1, 10 * 16 + 2, 14, 13);
     }
 
     drawPauseMenu() {
         push();
         fill(255);
-        rect(width/2-75, 70, 150, 150);
+        rect(width/2 - 75, 70, 150, 150);
         fill(0);
-        rect(width/2-70, 75, 140, 140);
+        rect(width/2 - 70, 75, 140, 140);
         stroke(1);
         textSize(32);
         fill(255);
-        text("Paused", width/2-48, 120);
+        text("Paused", width/2 - 48, 120);
         pop();
         for (let button of Object.values(this.buttons)) {
             button.draw();
@@ -342,6 +361,9 @@ class GameState extends State {
             this.player.draw();
             this.enemies.forEach((ghost) => {
                 ghost.draw();
+            });
+            this.projectiles.forEach((projectile) => {
+                projectile.draw();
             });
             this.drawTimer();
             if (this.finished && this.map === map2) {

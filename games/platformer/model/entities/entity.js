@@ -21,6 +21,15 @@ class Entity {
         throw new Error("Abstract method");
     }
 
+    drawHitBox() {
+        push();
+        noFill();
+        strokeWeight(1);
+        stroke(0, 255, 0);
+        rect(this.x - camera.x, this.y - camera.y, this.width, this.height);
+        pop();
+    }
+
     checkRightWall(map) {
         let j = Math.floor((this.x + this.width/2) / unitLength) + 1;
         if (j >= map.numCols && !map.rightMap) {

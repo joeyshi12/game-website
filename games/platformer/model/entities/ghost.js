@@ -1,55 +1,50 @@
 class Ghost extends Entity {
-    ACCELERATION = 2.5;
-    MAX_SPEED = 2.5;
-    RANGE = 400;
-    theta = 0;
-    update_timer = 28;
-    trigger = false;
+    SPEED = 3;
+    RANGE = 300;
+    UPDATE_BUFFER = 20;
 
     constructor(x, y, target) {
-        super(x, y, unitLength, unitLength);
+        super(x, y, 36, 36);
         this.target = target;
         this.vx = 0;
         this.vy = 0;
+        this.angle = 0
+        this.update_timer = 20;
+        this.triggered = false;
+        this.sprite = spriteSheet.get(26 * 16 + 1, 6 * 16, 14, 16);
     }
 
     update() {
-        let dx = this.target.x - this.x;
-        let dy = this.target.y - this.y;
+        const dx = this.target.x - this.x;
+        const dy = this.target.y - this.y;
         const r = Math.sqrt(dx**2 + dy**2);
         if (r < this.RANGE) {
-            this.trigger = true;
+            this.triggered = true;
         }
-        if (!this.trigger) {
-            return;
-        }
-        dx = dx / r;
-        dy = dy / r;
-        if (this.update_timer > 0) {
-            this.update_timer -= 1;
-        } else {
-            this.update_timer = 28;
-            if (this.vx**2 + this.vy**2 < this.MAX_SPEED) {
-                this.vx += this.ACCELERATION * dx;
-                this.vy += this.ACCELERATION * dy;
+        if (this.triggered) {
+            const tx = dx / r;
+            const ty = dy / r;
+            if (this.update_timer > 0) {
+                this.update_timer--;
             } else {
-                this.vx = this.MAX_SPEED * dx;
-                this.vy = this.MAX_SPEED * dy;
+                this.vx = this.SPEED * tx;
+                this.vy = this.SPEED * ty;
+                this.update_timer = this.UPDATE_BUFFER;
             }
         }
-        this.width += 0.4*Math.cos(this.theta)
-        this.theta += 0.1;
-        this.x = this.x + this.vx - 0.4*Math.sin(this.theta);
-        this.y = this.y + this.vy + 0.4*Math.cos(this.theta);
+        this.angle = (this.angle + 0.1) % (2 * Math.PI);
+        this.x = this.x + this.vx + 0.7 * Math.cos(this.angle);
+        this.y = this.y + this.vy + 0.7 * Math.sin(this.angle);
     }
 
     draw() {
+        // this.drawHitBox();
         push();
         if (this.vx > 0) {
             scale(-1, 1);
-            image(spriteSheet, (774 - unitLength) - (this.x - camera.x + spriteSheet.width), this.y - camera.y, this.width, this.height, 26*16 + 1, 6*16 + 3, 14, 13);
+            image(this.sprite, -(this.x - camera.x) - this.width, this.y - camera.y, this.width + 3 * Math.cos(this.angle), this.height);
         } else {
-            image(spriteSheet, this.x - camera.x, this.y - camera.y, this.width, this.height, 26*16 + 1, 6*16 + 3, 14, 13);
+            image(this.sprite, this.x - camera.x, this.y - camera.y, this.width + 3 * Math.cos(this.angle), this.height);
         }
         pop();
     }

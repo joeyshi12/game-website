@@ -1,24 +1,23 @@
 class FireBall {
     SPEED =  10;
 
-    constructor(x, y, direction_x, direction_y) {
+    constructor(x, y, dir_x, dir_y) {
         this.x = x;
         this.y = y;
-        this.direction_x = direction_x;
-        this.direction_y = direction_y;
+        this.dir_x = dir_x;
+        this.dir_y = dir_y;
         this.rotation = 1;
     }
 
     update() {
-        this.x += this.SPEED * this.direction_x;
-        this.y += this.SPEED * this.direction_y;
+        this.x += this.SPEED * this.dir_x;
+        this.y += this.SPEED * this.dir_y;
     }
 
-    draw(shift_x, shift_y) {
-        if (gameManager.player.isFacingRight) {
-            image(spriteSheet, this.x - shift_x, this.y - shift_y, unitLength, unitLength, 15 * 16, 10 * 16, 16, 16);
-        } else {
-            image(spriteSheet, (774 - unitLength) - (this.x - shift_x + spriteSheet.width), this.y - shift_y, unitLength, unitLength, 15 * 16, 10 * 16, 16, 16);
-        }
+    draw() {
+        push();
+        fill(255);
+        circle(this.x - camera.x, this.y - camera.y, 30);
+        pop();
     }
 }

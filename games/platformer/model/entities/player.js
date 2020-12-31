@@ -3,10 +3,10 @@ class Player extends Entity {
     GRAVITY = 0.4;
     MAX_SPEED = 4;
     ANIMATION_BUFFER = 6;
-    JUMP_VELOCITY = -10;
+    JUMP_VELOCITY = 10;
 
     constructor(x, y) {
-        super(x, y, unitLength - 6, unitLength - 6);
+        super(x, y, 26, 22);
         this.vx = 0;
         this.vy = 0;
         this.direction = 0;
@@ -14,8 +14,11 @@ class Player extends Entity {
         this.animTimer = this.ANIMATION_BUFFER;
         this.isGrounded = false;
         this.isFacingRight = true;
-        this.isLanding = false;
         this.isDead = false;
+        this.sprites = [];
+        for (let i = 0; i < 6; i++) {
+            this.sprites[i] = spriteSheet.get((18 + i) * 16 + 1, 7 * 16, 16, 16);
+        }
     }
 
     moveLeft() {
@@ -35,7 +38,7 @@ class Player extends Entity {
     jump() {
         if (!this.isDead && this.isGrounded) {
             this.y -= 1;
-            this.vy = this.JUMP_VELOCITY;
+            this.vy = -this.JUMP_VELOCITY;
             this.isGrounded = false;
             jumpSound.play();
         }
@@ -53,10 +56,6 @@ class Player extends Entity {
         }
     }
 
-    setDead() {
-        this.isDead = true;
-    }
-
     update(map) {
         this.updateAnimation();
         this.updateHorizontal(map);
@@ -66,13 +65,13 @@ class Player extends Entity {
     updateVerticalMovement(map) {
         const ceiling = this.checkCeiling(map);
         const ground = this.checkGround(map);
+        const isLanding = !this.isGrounded;
         this.isGrounded = ground !== -1 && this.y + this.vy >= ground - this.height - 1;
         if (this.isGrounded) {
             this.vy = 0;
             this.y = ground - this.height - 1;
-            if (this.isLanding) {
+            if (isLanding) {
                 landSound.play();
-                this.isLanding = false;
             }
         } else {
             if (ceiling >= 0 && this.y + this.vy <= ceiling + 1) {
@@ -82,7 +81,6 @@ class Player extends Entity {
                 this.vy += this.GRAVITY;
                 this.y += this.vy;
             }
-            this.isLanding = true;
         }
     }
 
@@ -135,12 +133,13 @@ class Player extends Entity {
     }
 
     draw() {
+        // this.drawHitBox();
         push();
         if (this.isFacingRight) {
-            image(spriteSheet, this.x - camera.x, this.y - camera.y, this.width, this.height, (18 + this.animIdx) * 16 + 1, 7 * 16 + 3, 14, 13);
+            image(this.sprites[this.animIdx], this.x - camera.x, this.y - camera.y - 8, 30, 30);
         } else {
             scale(-1, 1);
-            image(spriteSheet, (774 - unitLength) - (this.x - camera.x + spriteSheet.width), this.y - camera.y, this.width, this.height, (18 + this.animIdx) * 16 + 1, 7 * 16 + 3, 14, 13);
+            image(this.sprites[this.animIdx], -(this.x - camera.x) - this.width, this.y - camera.y - 8, 30, 30);
         }
         pop();
     }
