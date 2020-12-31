@@ -56,8 +56,8 @@ class GameState extends State {
     }
 
     updateGameStatus() {
-        let i = Math.floor((this.player.y + this.player.height/2) / unitLength);
-        let j = Math.floor((this.player.x + this.player.width/2) / unitLength);
+        const i = Math.floor((this.player.y + this.player.height/2) / unitLength);
+        const j = Math.floor((this.player.x + this.player.width/2) / unitLength);
         if (this.map.getTile(i, j) === 22) {
             this.player.isDead = true;
         }

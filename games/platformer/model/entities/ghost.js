@@ -1,6 +1,6 @@
 class Ghost extends Entity {
-    SPEED = 3;
-    RANGE = 300;
+    SPEED = 2;
+    RANGE = 320;
     UPDATE_BUFFER = 20;
 
     constructor(x, y, target) {
@@ -33,8 +33,8 @@ class Ghost extends Entity {
             }
         }
         this.angle = (this.angle + 0.1) % (2 * Math.PI);
-        this.x = this.x + this.vx + 0.7 * Math.cos(this.angle);
-        this.y = this.y + this.vy + 0.7 * Math.sin(this.angle);
+        this.x += this.vx + 0.7 * Math.cos(this.angle);
+        this.y += this.vy + 0.7 * Math.sin(this.angle);
     }
 
     draw() {

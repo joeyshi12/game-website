@@ -38,8 +38,8 @@ class Entity {
         if (j >= 0 && j < map.numCols) {
             let start = Math.floor(this.y / unitLength);
             let end = Math.floor((this.y + this.height) / unitLength);
-            start = Math.min(map.numRows, Math.max(0, start));
-            end = Math.min(map.numRows, Math.max(0, end));
+            start = Math.max(0, start);
+            end = Math.min(map.numRows - 1,  end);
             for (let i = start; i <= end; i++) {
                 if (solids.has(map.getTile(i, j))) {
                     return j * unitLength;
@@ -54,8 +54,8 @@ class Entity {
         if (i >= 0 && i < map.numRows) {
             let start = Math.floor(this.x / unitLength);
             let end = Math.floor((this.x + this.width) / unitLength);
-            start = Math.min(map.numCols, Math.max(0, start));
-            end = Math.min(map.numCols, Math.max(0, end));
+            start = Math.max(0, start);
+            end = Math.min(map.numCols - 1, end);
             for (let j = start; j <= end; j++) {
                 if (solids.has(map.getTile(i, j))) {
                     return (i + 1) * unitLength;
@@ -73,8 +73,8 @@ class Entity {
         if (j >= 0 && j < map.numCols) {
             let start = Math.floor(this.y / unitLength);
             let end = Math.floor((this.y + this.height) / unitLength);
-            start = Math.min(map.numRows, Math.max(0, start));
-            end = Math.min(map.numRows, Math.max(0, end));
+            start = Math.max(0, start);
+            end = Math.min(map.numRows - 1,end);
             for (let i = start; i <= end; i++) {
                 if (solids.has(map.getTile(i, j))) {
                     return j * unitLength;
@@ -87,8 +87,8 @@ class Entity {
     checkGround(map) {
         let i = Math.floor((this.y + this.height) / unitLength) + 1;
         if (i >= 0 && i < map.numRows) {
-            let start = Math.floor(this.x / unitLength);
-            let end = Math.floor((this.x + this.width) / unitLength);
+            let start = Math.max(0, Math.floor(this.x / unitLength));
+            let end = Math.min(map.numCols - 1, Math.floor((this.x + this.width) / unitLength));
             start = Math.min(map.numCols, Math.max(0, start));
             end = Math.min(map.numCols, Math.max(0, end));
             for (let j = start; j <= end; j++) {

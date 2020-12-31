@@ -46,9 +46,9 @@ class Player extends Entity {
 
     dropDownPlatform(map) {
         if (!this.isDead && this.isGrounded) {
-            let i = Math.floor((this.y + this.height) / unitLength) + 1;
+            const i = Math.floor((this.y + this.height) / unitLength) + 1;
             for (let j = Math.floor((this.x) / unitLength); j <= Math.floor((this.x + this.width) / unitLength); j++) {
-                if (!platforms.has(map.getTile(i, j))) {
+                if (!platforms.has(map.getTile(i, j)) && map.getTile(i, j) !== 0) {
                     return;
                 }
             }
