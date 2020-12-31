@@ -12,16 +12,22 @@ class OptionsMenu extends State {
 
     clickListener(manager) {
         if (this.buttons["left"].isHovering()) {
+            clickSound.play();
             this.awaitingFor = "left";
         } else if (this.buttons["right"].isHovering()) {
+            clickSound.play();
             this.awaitingFor = "right";
         } else if (this.buttons["jump"].isHovering()) {
+            clickSound.play();
             this.awaitingFor = "jump";
         } else if (this.buttons["drop"].isHovering()) {
+            clickSound.play();
             this.awaitingFor = "drop";
         } else if (this.buttons["pause"].isHovering()) {
+            clickSound.play();
             this.awaitingFor = "pause";
         } else if (this.buttons["back"].isHovering()) {
+            clickSound.play();
             manager.setState(new StartMenu());
         }
     }

@@ -12,7 +12,7 @@ class Player extends Entity {
         this.direction = 0;
         this.animIdx = 0;
         this.animTimer = this.ANIMATION_BUFFER;
-        this.isGrounded = false;
+        this.isGrounded = true;
         this.isFacingRight = true;
         this.isDead = false;
         this.sprites = [];

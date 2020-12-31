@@ -7,8 +7,10 @@ class StartMenu extends State {
 
     clickListener(manager) {
         if (this.buttons["start"].isHovering()) {
+            clickSound.play();
             manager.setState(new GameState());
         } else if (this.buttons["options"].isHovering()) {
+            clickSound.play();
             manager.setState(new OptionsMenu());
         }
     }

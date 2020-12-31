@@ -3,7 +3,7 @@ class Button {
         this.text = text;
         this.x = x;
         this.y = y;
-        this.width = 10*text.length;
+        this.width = 10 * text.length;
         this.height = 20;
     }
 

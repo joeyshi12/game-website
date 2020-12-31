@@ -97,10 +97,12 @@ class GameState extends State {
     clickListener(manager) {
         if (this.paused) {
             if (this.buttons["reset"].isHovering()) {
+                clickSound.play();
                 this.reset();
                 this.paused = false;
                 this.finished = false;
             } else if (this.buttons["exit"].isHovering()) {
+                clickSound.play();
                 manager.setState(new StartMenu());
             }
         } else {

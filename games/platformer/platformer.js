@@ -8,6 +8,7 @@ function preload() {
     spriteSheet = loadImage('games/platformer/assets/sprite_sheet.png');
     jumpSound = loadSound('games/platformer/assets/jump.mp3');
     landSound = loadSound('games/platformer/assets/land.mp3');
+    clickSound = loadSound('games/platformer/assets/click.mp3');
     pauseSound = loadSound('games/platformer/assets/pause.mp3');
 }
 
