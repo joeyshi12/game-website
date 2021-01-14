@@ -9,15 +9,11 @@
     min-height: 100vh;
 }
 
-#content-wrap {
-    padding-bottom: 2.5rem;
-}
-
 header {
-    padding-top: 30px;
-    padding-bottom: 30px;
-    padding-left: 30px;
+    padding: 30px;
     background-color: #1E2832;
+    float: right;
+    width: 100%;
 }
 
 header a {
@@ -37,15 +33,24 @@ header img {
     color: white;
 }
 
-.gallery {
+.about {
+    border: 1px solid;
+    height: 100px;
+}
+
+.grid {
+    width: 100%;
     display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+    padding: 20px;
 }
 
 .card {
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.3s;
-    width: 240px;
-    margin: 40px;
+    width: 280px;
+    margin: 20px;
 }
 
 .card img {
@@ -61,15 +66,15 @@ header img {
 }
 
 .canvas {
-    margin: 40px;
 }
 
 #footer {
-    position: absolute;
+    position: fixed;
+    left: 0;
     bottom: 0;
     width: 100%;
-    height: 2.5rem;
-    color: white;
+    font-size: 20px;
     background-color: #1E2832;
+    color: white;
     text-align: center;
 }

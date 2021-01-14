@@ -164,6 +164,7 @@ function preload() {
 function setup() {
     canvas = createCanvas(n * unitLength, n * unitLength);
     canvas.parent("sketch-holder");
+    canvas.center('vertical');
     canvas.center('horizontal');
 }
 
@@ -172,6 +173,7 @@ function keyPressed() {
 }
 
 function windowResized() {
+    canvas.center('vertical');
     canvas.center('horizontal');
 }
 

@@ -1,6 +1,6 @@
 class Item extends Entity {
-    constructor() {
-        super();
+    constructor(x, y) {
+        super(x, y, 30, 30);
     }
 
     update() {}

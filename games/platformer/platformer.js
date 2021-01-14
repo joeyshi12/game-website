@@ -15,6 +15,7 @@ function preload() {
 function setup() {
     canvas = createCanvas(width, height);
     canvas.parent("sketch-holder");
+    canvas.center('vertical');
     canvas.center('horizontal');
     textFont(inconsolata);
     camera = new Camera(width / 2, height / 2, 0, 40 * unitLength, 0, 20 * unitLength);
@@ -27,6 +28,7 @@ function setup() {
 
 function windowResized() {
     canvas.center('horizontal');
+    canvas.center('vertical');
 }
 
 function keyPressed() {
