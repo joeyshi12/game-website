@@ -1,5 +1,6 @@
 let canvas;
-let inconsolata, spriteSheet, jumpSound, landSound;
+let inconsolata, spriteSheet;
+let jumpSound, landSound, clickSound, pauseSound;
 let camera, maps;
 let gameManager;
 

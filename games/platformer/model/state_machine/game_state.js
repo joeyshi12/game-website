@@ -157,7 +157,7 @@ class GameState extends State {
         push();
         fill(255);
         textSize(22);
-        text("Timer: " + this.deltaTime/1000, 540, 40);
+        text("Timer: " + this.deltaTime/1000, 530, 40);
         pop();
     }
 
