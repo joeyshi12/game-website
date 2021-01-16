@@ -70,7 +70,7 @@ class Food {
     }
 }
 
-class GameRun {
+class GameManager {
     constructor() {
         this.snake = new Snake();
         this.food = new Food();
@@ -111,7 +111,7 @@ class GameRun {
         }
     }
 
-    keyPressed() {
+    keyPressListener() {
         const dx = this.snake.xpos[0] - this.snake.xpos[1];
         const dy = this.snake.ypos[0] - this.snake.ypos[1];
 
@@ -155,10 +155,10 @@ class GameRun {
 }
 
 let canvas;
-let gameRun = new GameRun();
+const gameManager = new GameManager();
 
 function preload() {
-    gameRun.food.setImage(loadImage("games/snake/apple.png"));
+    gameManager.food.setImage(loadImage("games/snake/apple.png"));
 }
 
 function setup() {
@@ -169,7 +169,7 @@ function setup() {
 }
 
 function keyPressed() {
-    gameRun.keyPressed(keyCode);
+    gameManager.keyPressListener();
 }
 
 function windowResized() {
@@ -180,7 +180,7 @@ function windowResized() {
 function draw() {
     background(255);
     fill(255, 255, 255);
-    frameRate(14);
-    gameRun.draw();
-    gameRun.update();
+    frameRate(18);
+    gameManager.draw();
+    gameManager.update();
 }

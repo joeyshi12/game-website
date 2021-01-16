@@ -37,15 +37,15 @@ class Ball {
     }
 
     update() {
-        this.x += this.dx;
-        this.y += this.dy;
+        this.x += this.tx;
+        this.y += this.ty;
 
         if (this.y <= 0 || this.y + ball_diameter >= height) {
-            this.dy = Math.abs(this.dy);
+            this.ty = Math.abs(this.ty);
         }
 
         if (this.y + ball_diameter >= height) {
-            this.dy = -Math.abs(this.dy);
+            this.ty = -Math.abs(this.ty);
         }
     }
 
@@ -90,8 +90,8 @@ function spawnHell() {
         let angle = (Math.random() - 0.5) * Math.PI;
         let ball = new Ball();
         let direction = Math.random() > 0.5? 1: -1;
-        ball.dx = direction * ball_speed * Math.cos(angle);
-        ball.dy = ball_speed * Math.sin(angle);
+        ball.tx = direction * ball_speed * Math.cos(angle);
+        ball.ty = ball_speed * Math.sin(angle);
         balls.push(ball);
     }
     setTimeout(spawnHell, 600);
