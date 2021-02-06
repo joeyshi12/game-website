@@ -16,22 +16,24 @@ header {
     width: 100%;
 }
 
-header a {
-    text-decoration: none;
-}
-
 header img {
     float: left;
     height: 60px;
 }
 
-.center {
-    padding-bottom: 20px;
-}
-
-.title {
+h1.title > a {
+    text-decoration: none;
     color: white;
     font-family: Verdana;
+}
+
+p > a {
+    text-decoration: none;
+    color: blue;
+}
+
+header > div {
+    padding-bottom: 20px;
 }
 
 .about {
