@@ -1,8 +1,8 @@
-const width = 600;
-const height = 400;
+const width = 650;
+const height = 450;
 const padding = 40;
-const paddleWidth = 10;
-const paddleHeight = 70;
+const paddleWidth = 12;
+const paddleHeight = 80;
 const paddleSpeed = 6;
 const ballDiameter = 12;
 const ballSpeed = 10;
@@ -113,21 +113,23 @@ class GameManager {
         fill(255);
         line(width / 2, 0, width / 2, height);
         textSize(32);
-        text(this.tally[0], 160, 40);
-        text(this.tally[1], width - 180, 40);
+        text(this.tally[0], 160, 50);
+        text(this.tally[1], width - 180, 50);
         pop();
     }
 
     updateOpponent() {
-        let dy = this.opponent.y - this.ball.y + paddleHeight / 2;
-        if (dy > 5) {
-            this.opponent.setDirection(-1);
-        } else if (dy < 5) {
-            this.opponent.setDirection(1);
-        } else {
-            this.opponent.setDirection(0);
+        if (this.ball.tx > 0) {
+            let dy = this.opponent.y - this.ball.y + paddleHeight / 2;
+            if (dy > 5) {
+                this.opponent.setDirection(-1);
+            } else if (dy < 5) {
+                this.opponent.setDirection(1);
+            } else {
+                this.opponent.setDirection(0);
+            }
+            this.opponent.update();
         }
-        this.opponent.update();
     }
 
     handleGameOver() {
@@ -196,13 +198,6 @@ function preload() {
 function setup() {
     canvas = createCanvas(width, height);
     canvas.parent("sketch-holder");
-    canvas.center('vertical');
-    canvas.center('horizontal');
-}
-
-function windowResized() {
-    canvas.center('vertical');
-    canvas.center('horizontal');
 }
 
 function keyPressed() {

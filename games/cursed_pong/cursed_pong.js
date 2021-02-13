@@ -76,13 +76,6 @@ function preload() {
 function setup() {
     canvas = createCanvas(width, height);
     canvas.parent("sketch-holder");
-    canvas.center('vertical');
-    canvas.center('horizontal');
-}
-
-function windowResized() {
-    canvas.center('vertical');
-    canvas.center('horizontal');
 }
 
 function spawnHell() {
