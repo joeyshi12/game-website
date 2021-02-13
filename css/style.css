@@ -1,85 +1,67 @@
-* {
+body {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-}
-
-#page-container {
-    position: relative;
+    display: flex;
+    flex-direction: column;
     min-height: 100vh;
 }
 
-header {
-    padding: 30px;
-    background-color: #1E2832;
-    float: right;
-    width: 100%;
-}
-
-header img {
-    float: left;
-    height: 60px;
-}
-
-h1.title > a {
+a {
     text-decoration: none;
+}
+
+#header {
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    background: #1E2832;
+}
+
+#sketch-holder {
+    display: flex;
+    flex: auto;
+    align-items: center;
+    justify-content: center;
+    background: white;
+}
+
+#footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 20px;
+    font-size: 14px;
+    color: white;
+    background: #1E2832;
+}
+
+.title {
     color: white;
     font-family: Verdana;
 }
 
-p > a {
-    text-decoration: none;
-    color: blue;
-}
-
-header > div {
-    padding-bottom: 20px;
-}
-
-.about {
-    border: 1px solid;
-    height: 100px;
-}
-
-.grid {
-    width: 100%;
+.selection {
     display: flex;
-    flex-flow: row wrap;
-    justify-content: flex-start;
     padding: 20px;
+    flex-flow: row wrap;
+    flex: auto;
+    justify-content: flex-start;
 }
 
 .card {
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.3s;
-    width: 260px;
+    width: 240px;
+    height: 380px;
     margin: 20px;
     font-size: 16px;
     font-family: Trebuchet MS, sans-serif;
 }
 
-.card img {
-    width: 100%;
-}
-
-.card:hover {
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-}
-
-.container {
+.card .description {
     padding: 2px 16px;
 }
 
-.canvas {
-}
-
-#footer {
-    position: fixed;
-    left: 0;
-    bottom: 0;
+.card img {
     width: 100%;
-    font-size: 18px;
-    background-color: #1E2832;
-    color: white;
-    text-align: center;
 }

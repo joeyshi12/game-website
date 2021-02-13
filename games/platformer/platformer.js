@@ -16,8 +16,6 @@ function preload() {
 function setup() {
     canvas = createCanvas(width, height);
     canvas.parent("sketch-holder");
-    canvas.center('vertical');
-    canvas.center('horizontal');
     textFont(inconsolata);
     camera = new Camera(width / 2, height / 2, 0, 40 * unitLength, 0, 20 * unitLength);
     maps = [new Map(data0, 20, 40), new Map(data1, 20, 40), new Map(data2, 20, 40), new Map(data3, 30, 30)];
@@ -25,11 +23,6 @@ function setup() {
     maps[1].setRightMap(maps[2]);
     maps[2].setRightMap(maps[3]);
     gameManager = new GameManager();
-}
-
-function windowResized() {
-    canvas.center('horizontal');
-    canvas.center('vertical');
 }
 
 function keyPressed() {
