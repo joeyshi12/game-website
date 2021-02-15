@@ -29,7 +29,8 @@ a {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 20px;
+    flex-direction: column;
+    height: 80px;
     font-size: 14px;
     color: white;
     background: #1E2832;
@@ -58,10 +59,10 @@ a {
     font-family: Trebuchet MS, sans-serif;
 }
 
-.card .description {
-    padding: 2px 16px;
-}
-
 .card img {
     width: 100%;
+}
+
+.card .description {
+    padding: 2px 16px;
 }
