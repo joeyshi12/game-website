@@ -10,23 +10,20 @@
     <link rel="stylesheet" href="../../../css/style.css">
 </head>
 <body>
-<div id="page-container">
-    <div id="content-wrap">
-        <header>
-            <a href="../../../index.html">
-                <div class="center"><img src="../../../images/favicon.ico" alt=""></div>
-                <h1 class="title"> Cool Games </h1>
-            </a>
-        </header>
-        <div class="canvas">
-            <div id="sketch-holder"></div>
-        </div>
-        <input type="text" value="Import" id="import">
-        <input type="text" value="Export" id="export">
+    <div id="header">
+        <div class="center"><img src="../../../images/favicon.ico" alt=""></div>
+        <h1 class="title"> Cool Games </h1>
     </div>
-    <footer id="footer">
+    <div class="canvas">
+        <div id="sketch-holder"></div>
+    </div>
+    <div>
+        <label><input type="text" id="data"></label>
+        <button id="import" onclick="setData()">Import</button>
+        <button id="export" onclick="console.log(data)">Export</button>
+    </div>
+    <div id="footer">
         <small>&copy; Copyright 2020, Joey Shi</small>
-    </footer>
-</div>
+    </div>
 </body>
 </html>

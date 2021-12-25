@@ -1,5 +1,5 @@
-const numRows = 30;
-const numCols = 30;
+const numRows = 20;
+const numCols = 40;
 const unitLength = 24;
 const width = 48*unitLength;
 const height = (22 + numRows)*unitLength;
@@ -7,6 +7,9 @@ let spriteSheet;
 const selected = [0, 0];
 let data = [];
 
+function setData() {
+    data = document.getElementById("data").value.split(",").map(x => Number(x));
+}
 
 function preload() {
     spriteSheet = loadImage('../assets/sprite_sheet.png');
@@ -47,7 +50,6 @@ function keyPressed() {
 }
 
 function mousePressed() {
-    console.log(mouseX, mouseY);
     if (mouseY < 22*unitLength) {
         selected[0] = Math.floor(mouseX/unitLength);
         selected[1] = Math.floor(mouseY/unitLength);
